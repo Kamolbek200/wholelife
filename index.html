@@ -1,0 +1,5019 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#6c5ce7" />
+    <meta
+      name="description"
+      content="Wholelife - The Ultimate All-in-One Life Utility Suite"
+    />
+    <title>WholeLife — All-in-One Life Suite</title>
+    <style>
+      /* ============================================
+CSS RESET & ROOT VARIABLES
+============================================ */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+          sans-serif;
+        background: #0f0f1a;
+        color: #e0e0e0;
+        line-height: 1.6;
+        overflow-x: hidden;
+        min-height: 100vh;
+        padding-bottom: 80px;
+      }
+      :root {
+        --primary: #6c5ce7;
+        --primary-dark: #5a4bd1;
+        --primary-light: #a29bfe;
+        --secondary: #00cec9;
+        --accent: #fd79a8;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --danger: #e17055;
+        --dark: #1a1a2e;
+        --darker: #0f0f1a;
+        --card: #16213e;
+        --card-hover: #1a2744;
+        --text: #e0e0e0;
+        --text-muted: #8892b0;
+        --text-dim: #5a6070;
+        --border: #2d3561;
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.4);
+        --radius: 16px;
+        --radius-sm: 10px;
+        --radius-xs: 6px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      body.light-mode {
+        --darker: #f0f2f5;
+        --dark: #ffffff;
+        --card: #ffffff;
+        --card-hover: #f8f9fa;
+        --text: #1a1a2e;
+        --text-muted: #666;
+        --text-dim: #999;
+        --border: #e0e0e0;
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.15);
+      }
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 50px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-light);
+      }
+      .app-header {
+        background: var(--dark);
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: var(--shadow);
+        border-bottom: 1px solid var(--border);
+      }
+      .app-logo {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -1px;
+      }
+      .app-logo span {
+        color: var(--secondary);
+      }
+      .header-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .icon-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        border: none;
+        background: var(--card);
+        color: var(--text);
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        touch-action: manipulation;
+      }
+      .icon-btn:hover,
+      .icon-btn:active {
+        background: var(--primary);
+        transform: scale(1.05);
+      }
+      /* ============================================
+BACK BUTTON (YANGI QO'SHILDI)
+============================================ */
+      .back-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        border: none;
+        background: var(--card);
+        color: var(--text);
+        font-size: 20px;
+        cursor: pointer;
+        display: none; /* Boshlang'ich holatda yashirin (Dashboard'da) */
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        touch-action: manipulation;
+        margin-right: 8px;
+      }
+      .back-btn:hover,
+      .back-btn:active {
+        background: var(--primary);
+        color: white;
+        transform: scale(1.05);
+      }
+      .back-btn.visible {
+        display: flex; /* Boshqa sahifalarda ko'rinadi */
+      }
+      .search-container {
+        padding: 15px 20px;
+        background: var(--dark);
+        border-bottom: 1px solid var(--border);
+      }
+      .search-box {
+        position: relative;
+      }
+      .search-box input {
+        width: 100%;
+        padding: 12px 20px 12px 45px;
+        border-radius: 50px;
+        border: 2px solid var(--border);
+        background: var(--card);
+        color: var(--text);
+        font-size: 15px;
+        outline: none;
+        transition: var(--transition);
+      }
+      .search-box input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.2);
+      }
+      .search-box .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+      }
+      .page {
+        display: none;
+        padding: 20px;
+        animation: fadeIn 0.4s ease;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .page.active {
+        display: block;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(25px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+      @keyframes breathe {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.6;
+        }
+        50% {
+          transform: scale(1.3);
+          opacity: 1;
+        }
+      }
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--dark);
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-around;
+        padding: 8px 0;
+        z-index: 100;
+        box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.3);
+      }
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 5px 12px;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: var(--transition);
+        border-radius: 12px;
+        touch-action: manipulation;
+        position: relative;
+        font-size: 10px;
+      }
+      .nav-item .nav-icon {
+        font-size: 20px;
+        margin-bottom: 3px;
+      }
+      .nav-item.active {
+        color: var(--primary);
+      }
+      .nav-item.active::after {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 3px;
+        background: var(--primary);
+        border-radius: 50px;
+      }
+      .nav-item:hover,
+      .nav-item:active {
+        color: var(--primary);
+        background: rgba(108, 92, 231, 0.1);
+      }
+      .card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow);
+        margin-bottom: 15px;
+        border: 1px solid var(--border);
+        transition: var(--transition);
+      }
+      .card:hover {
+        border-color: var(--primary);
+      }
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+      .card-title {
+        font-size: 16px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge {
+        background: var(--primary);
+        color: white;
+        padding: 3px 10px;
+        border-radius: 50px;
+        font-size: 11px;
+        font-weight: 600;
+      }
+      .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        touch-action: manipulation;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+      }
+      .btn-success {
+        background: var(--success);
+        color: white;
+      }
+      .btn-danger {
+        background: var(--danger);
+        color: white;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 2px solid var(--border);
+        color: var(--text);
+      }
+      .btn-outline:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .btn-block {
+        width: 100%;
+      }
+      .input {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: var(--radius-sm);
+        border: 2px solid var(--border);
+        background: var(--darker);
+        color: var(--text);
+        font-size: 14px;
+        outline: none;
+        transition: var(--transition);
+        touch-action: manipulation;
+      }
+      .input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.2);
+      }
+      select.input {
+        -webkit-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238892b0' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 35px;
+      }
+      textarea.input {
+        min-height: 120px;
+        resize: vertical;
+      }
+      .input-group {
+        margin-bottom: 15px;
+      }
+      .input-group label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .input-row {
+        display: flex;
+        gap: 10px;
+      }
+      .input-row > * {
+        flex: 1;
+      }
+      .grid {
+        display: grid;
+        gap: 15px;
+      }
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .grid-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      @media (max-width: 600px) {
+        .grid-2,
+        .grid-3,
+        .grid-4 {
+          grid-template-columns: 1fr 1fr;
+        }
+        .page {
+          padding: 15px;
+        }
+        .input-row {
+          flex-direction: column;
+        }
+      }
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--text-muted);
+      }
+      .empty-state .icon {
+        font-size: 50px;
+        margin-bottom: 15px;
+      }
+      .empty-state h4 {
+        font-size: 18px;
+        color: var(--text);
+        margin-bottom: 8px;
+      }
+      .empty-state p {
+        font-size: 13px;
+      }
+      .toast-container {
+        position: fixed;
+        top: 80px;
+        right: 15px;
+        z-index: 3000;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .toast {
+        background: var(--card);
+        border-radius: var(--radius-sm);
+        padding: 12px 18px;
+        box-shadow: var(--shadow-lg);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: slideInRight 0.3s ease;
+        min-width: 260px;
+        max-width: 350px;
+        border-left: 4px solid var(--primary);
+      }
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(100px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      .toast.success {
+        border-left-color: var(--success);
+      }
+      .toast.error {
+        border-left-color: var(--danger);
+      }
+      .toast.warning {
+        border-left-color: var(--warning);
+      }
+      .progress-bar {
+        height: 8px;
+        background: var(--border);
+        border-radius: 50px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        border-radius: 50px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        transition: width 0.5s ease;
+      }
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 500;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        backdrop-filter: blur(5px);
+      }
+      .modal-overlay.active {
+        display: flex;
+      }
+      .modal {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 25px;
+        width: 100%;
+        max-width: 500px;
+        max-height: 85vh;
+        overflow-y: auto;
+        animation: slideUp 0.3s ease;
+      }
+      .modal h3 {
+        margin-bottom: 20px;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+      }
+      .tabs {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 20px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .tab {
+        padding: 8px 18px;
+        border-radius: 50px;
+        border: 2px solid var(--border);
+        background: transparent;
+        color: var(--text-muted);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: var(--transition);
+        touch-action: manipulation;
+      }
+      .tab.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+      .tab:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .toggle {
+        position: relative;
+        width: 48px;
+        height: 26px;
+        flex-shrink: 0;
+      }
+      .toggle input {
+        display: none;
+      }
+      .toggle-slider {
+        position: absolute;
+        inset: 0;
+        background: var(--border);
+        border-radius: 50px;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .toggle-slider::before {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: white;
+        top: 3px;
+        left: 3px;
+        transition: var(--transition);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      .toggle input:checked + .toggle-slider {
+        background: var(--primary);
+      }
+      .toggle input:checked + .toggle-slider::before {
+        transform: translateX(22px);
+      }
+      input[type="range"] {
+        width: 100%;
+        height: 6px;
+        -webkit-appearance: none;
+        appearance: none;
+        background: var(--border);
+        border-radius: 50px;
+        outline: none;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--primary);
+        cursor: pointer;
+        border: 3px solid white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+      .welcome-banner {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--accent) 50%,
+          var(--secondary) 100%
+        );
+        border-radius: var(--radius);
+        padding: 30px;
+        color: white;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+      .welcome-banner::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -30%;
+        width: 250px;
+        height: 250px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+      }
+      .welcome-banner h2 {
+        font-size: 24px;
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 1;
+      }
+      .welcome-banner p {
+        opacity: 0.9;
+        font-size: 14px;
+        position: relative;
+        z-index: 1;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .stat-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 20px;
+        border: 1px solid var(--border);
+        text-align: center;
+        transition: var(--transition);
+      }
+      .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow);
+      }
+      .stat-card .stat-icon {
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+      .stat-card .stat-value {
+        font-size: 24px;
+        font-weight: 800;
+      }
+      .stat-card .stat-label {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .quick-action-btn {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 15px 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        touch-action: manipulation;
+      }
+      .quick-action-btn:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+      .quick-action-btn .qa-icon {
+        font-size: 24px;
+        margin-bottom: 5px;
+      }
+      .quick-action-btn .qa-label {
+        font-size: 10px;
+        font-weight: 600;
+      }
+      .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .todo-input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+      .todo-item {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: var(--transition);
+        animation: slideUp 0.3s ease;
+      }
+      .todo-item:hover {
+        border-color: var(--primary);
+      }
+      .todo-check {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: var(--transition);
+        font-size: 12px;
+      }
+      .todo-check.checked {
+        background: var(--success);
+        border-color: var(--success);
+        color: white;
+      }
+      .todo-item.done .todo-text {
+        text-decoration: line-through;
+        color: var(--text-muted);
+      }
+      .todo-item .todo-text {
+        flex: 1;
+        font-size: 14px;
+      }
+      .priority-tag {
+        padding: 3px 8px;
+        border-radius: 50px;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .priority-high {
+        background: rgba(225, 112, 85, 0.2);
+        color: var(--danger);
+      }
+      .priority-medium {
+        background: rgba(253, 203, 110, 0.2);
+        color: var(--warning);
+      }
+      .priority-low {
+        background: rgba(0, 184, 148, 0.2);
+        color: var(--success);
+      }
+      .todo-delete {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(225, 112, 85, 0.1);
+        color: var(--danger);
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+      .todo-delete:hover {
+        background: var(--danger);
+        color: white;
+      }
+      .budget-overview {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .budget-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 18px;
+        text-align: center;
+        border: 1px solid var(--border);
+      }
+      .budget-card h4 {
+        font-size: 11px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+      }
+      .budget-card .amount {
+        font-size: 20px;
+        font-weight: 800;
+      }
+      .budget-card.income .amount {
+        color: var(--success);
+      }
+      .budget-card.expense .amount {
+        color: var(--danger);
+      }
+      .budget-card.balance .amount {
+        color: var(--primary);
+      }
+      .transaction-item {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: var(--transition);
+      }
+      .transaction-item:hover {
+        border-color: var(--primary);
+      }
+      .transaction-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+      .transaction-icon.income {
+        background: rgba(0, 184, 148, 0.15);
+        color: var(--success);
+      }
+      .transaction-icon.expense {
+        background: rgba(225, 112, 85, 0.15);
+        color: var(--danger);
+      }
+      .transaction-info {
+        flex: 1;
+      }
+      .transaction-info .name {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .transaction-info .date {
+        font-size: 11px;
+        color: var(--text-muted);
+      }
+      .transaction-amount {
+        font-weight: 700;
+        font-size: 15px;
+      }
+      .transaction-amount.income {
+        color: var(--success);
+      }
+      .transaction-amount.expense {
+        color: var(--danger);
+      }
+      .notes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+      }
+      .note-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        transition: var(--transition);
+        animation: slideUp 0.3s ease;
+        position: relative;
+      }
+      .note-card:hover {
+        border-color: var(--primary);
+        transform: translateY(-3px);
+      }
+      .note-card .note-accent {
+        height: 4px;
+        border-radius: 50px;
+        margin-bottom: 12px;
+      }
+      .note-card h4 {
+        font-size: 15px;
+        margin-bottom: 8px;
+      }
+      .note-card p {
+        font-size: 13px;
+        color: var(--text-muted);
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .note-card .note-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+      }
+      .note-card .note-date {
+        font-size: 11px;
+        color: var(--text-dim);
+      }
+      .note-card .note-actions {
+        display: flex;
+        gap: 5px;
+      }
+      .note-card .note-actions button {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: none;
+        background: var(--border);
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 12px;
+        transition: var(--transition);
+      }
+      .note-card .note-actions button:hover {
+        background: var(--primary);
+        color: white;
+      }
+      .pomodoro-container {
+        text-align: center;
+      }
+      .timer-circle {
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        background: var(--card);
+        border: 8px solid var(--border);
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        box-shadow: var(--shadow-lg);
+      }
+      .timer-circle .time {
+        font-size: 48px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+      .timer-circle .label {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-top: 5px;
+      }
+      .timer-controls {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .timer-btn {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        border: none;
+        font-size: 22px;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+      }
+      .timer-btn.play {
+        background: var(--primary);
+        color: white;
+        box-shadow: 0 5px 20px rgba(108, 92, 231, 0.4);
+      }
+      .timer-btn.play:hover {
+        transform: scale(1.1);
+      }
+      .timer-btn.secondary {
+        background: var(--card);
+        color: var(--text);
+        border: 2px solid var(--border);
+      }
+      .calculator {
+        background: var(--card);
+        border-radius: var(--radius);
+        overflow: hidden;
+        border: 1px solid var(--border);
+        max-width: 360px;
+        margin: 0 auto;
+      }
+      .calc-display {
+        background: var(--darker);
+        padding: 25px 20px;
+        text-align: right;
+      }
+      .calc-expression {
+        font-size: 14px;
+        color: var(--text-muted);
+        min-height: 20px;
+      }
+      .calc-result {
+        font-size: 36px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+      .calc-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background: var(--border);
+      }
+      .calc-btn {
+        padding: 20px;
+        border: none;
+        background: var(--card);
+        color: var(--text);
+        font-size: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        touch-action: manipulation;
+      }
+      .calc-btn:hover {
+        background: var(--card-hover);
+      }
+      .calc-btn:active {
+        background: var(--primary);
+        color: white;
+      }
+      .calc-btn.operator {
+        background: rgba(108, 92, 231, 0.15);
+        color: var(--primary);
+      }
+      .calc-btn.operator:hover {
+        background: var(--primary);
+        color: white;
+      }
+      .calc-btn.equals {
+        background: var(--primary);
+        color: white;
+      }
+      .calc-btn.equals:hover {
+        background: var(--primary-dark);
+      }
+      .calc-btn.clear {
+        background: rgba(225, 112, 85, 0.15);
+        color: var(--danger);
+      }
+      .calc-btn.clear:hover {
+        background: var(--danger);
+        color: white;
+      }
+      .pass-display {
+        background: var(--darker);
+        border-radius: var(--radius);
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 20px;
+        border: 2px solid var(--border);
+      }
+      .pass-text {
+        font-family: "Courier New", monospace;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text);
+        word-break: break-all;
+        flex: 1;
+      }
+      .pass-options {
+        margin-bottom: 20px;
+      }
+      .pass-option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .pass-option label {
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .strength-bar {
+        height: 6px;
+        background: var(--border);
+        border-radius: 50px;
+        overflow: hidden;
+        margin-top: 8px;
+      }
+      .strength-fill {
+        height: 100%;
+        border-radius: 50px;
+        transition: var(--transition);
+      }
+      .converter-box {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 25px;
+        border: 1px solid var(--border);
+      }
+      .converter-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        margin-bottom: 15px;
+      }
+      .converter-input-group {
+        flex: 1;
+      }
+      .converter-input-group label {
+        display: block;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+      .swap-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        background: var(--card);
+        color: var(--text);
+        cursor: pointer;
+        font-size: 18px;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        touch-action: manipulation;
+      }
+      .swap-btn:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        transform: rotate(180deg);
+      }
+      .conv-result-box {
+        text-align: center;
+        padding: 20px;
+        background: var(--darker);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+      }
+      .conv-result-box .value {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--primary);
+      }
+      .conv-result-box .label {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 5px;
+      }
+      .habit-item {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 18px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: var(--transition);
+        animation: slideUp 0.3s ease;
+      }
+      .habit-item:hover {
+        border-color: var(--primary);
+      }
+      .habit-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        background: rgba(108, 92, 231, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+      .habit-info {
+        flex: 1;
+      }
+      .habit-info h4 {
+        font-size: 15px;
+        margin-bottom: 4px;
+      }
+      .habit-streak {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .habit-days {
+        display: flex;
+        gap: 4px;
+      }
+      .habit-day {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: 600;
+        color: var(--text-dim);
+        cursor: pointer;
+        transition: var(--transition);
+        touch-action: manipulation;
+      }
+      .habit-day.completed {
+        background: var(--success);
+        border-color: var(--success);
+        color: white;
+      }
+      .habit-day:hover {
+        border-color: var(--success);
+      }
+      .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .calendar-header h3 {
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .cal-nav {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        font-size: 16px;
+        transition: var(--transition);
+        touch-action: manipulation;
+      }
+      .cal-nav:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+      .cal-weekdays {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+      .cal-weekday {
+        text-align: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-muted);
+        padding: 8px 0;
+        text-transform: uppercase;
+      }
+      .cal-days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+      }
+      .cal-day {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        touch-action: manipulation;
+        position: relative;
+      }
+      .cal-day:hover {
+        background: var(--primary);
+        color: white;
+      }
+      .cal-day.today {
+        background: var(--primary);
+        color: white;
+        font-weight: 700;
+      }
+      .cal-day.other-month {
+        color: var(--text-dim);
+      }
+      .cal-day.has-event::after {
+        content: "";
+        position: absolute;
+        bottom: 3px;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      .breathing-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+        margin: 30px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+      }
+      .breathing-circle.breathing {
+        animation: breathe 4s ease-in-out infinite;
+      }
+      .bmi-result {
+        text-align: center;
+        padding: 20px;
+        background: var(--darker);
+        border-radius: var(--radius);
+        margin-top: 15px;
+        border: 1px solid var(--border);
+      }
+      .bmi-value {
+        font-size: 48px;
+        font-weight: 800;
+        color: var(--primary);
+      }
+      .bmi-category {
+        font-size: 16px;
+        font-weight: 600;
+        margin-top: 8px;
+      }
+      .water-glasses {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin: 20px 0;
+      }
+      .water-glass {
+        background: var(--card);
+        border: 2px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 30px;
+        touch-action: manipulation;
+      }
+      .water-glass.filled {
+        background: rgba(0, 206, 201, 0.2);
+        border-color: var(--secondary);
+      }
+      .water-glass:hover {
+        transform: scale(1.05);
+      }
+      .mood-options {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .mood-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 3px solid var(--border);
+        background: var(--card);
+        font-size: 28px;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+      }
+      .mood-btn:hover,
+      .mood-btn.selected {
+        border-color: var(--primary);
+        transform: scale(1.15);
+        background: rgba(108, 92, 231, 0.2);
+      }
+      .diary-entry {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        margin-bottom: 12px;
+        transition: var(--transition);
+      }
+      .diary-entry:hover {
+        border-color: var(--primary);
+      }
+      .diary-entry .entry-date {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .diary-entry .entry-text {
+        font-size: 14px;
+        line-height: 1.7;
+      }
+      .text-tools-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+      .text-stat {
+        background: var(--card);
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        text-align: center;
+        border: 1px solid var(--border);
+      }
+      .text-stat .value {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--primary);
+      }
+      .text-stat .label {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 4px;
+      }
+      .palette-colors {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        margin-bottom: 15px;
+      }
+      .palette-color {
+        aspect-ratio: 1;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 8px;
+        touch-action: manipulation;
+      }
+      .palette-color:hover {
+        transform: scale(1.05);
+      }
+      .palette-color span {
+        font-size: 10px;
+        font-weight: 600;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 3px 6px;
+        border-radius: 4px;
+        color: white;
+      }
+      .decision-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 15px 0;
+      }
+      .decision-chip {
+        background: var(--card);
+        border: 2px solid var(--border);
+        border-radius: 50px;
+        padding: 8px 16px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: var(--transition);
+        touch-action: manipulation;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .decision-chip:hover {
+        border-color: var(--primary);
+      }
+      .decision-chip .remove {
+        font-size: 14px;
+        color: var(--danger);
+        cursor: pointer;
+      }
+      .decision-result {
+        text-align: center;
+        padding: 30px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        border-radius: var(--radius);
+        color: white;
+        margin: 15px 0;
+      }
+      .decision-result h3 {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+      .stopwatch-display {
+        text-align: center;
+        padding: 30px;
+        background: var(--darker);
+        border-radius: var(--radius);
+        margin-bottom: 20px;
+      }
+      .stopwatch-time {
+        font-size: 56px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        color: var(--primary);
+      }
+      .stopwatch-ms {
+        font-size: 28px;
+        color: var(--text-muted);
+      }
+      .stopwatch-controls {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+      }
+      .lap-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 15px;
+        border-bottom: 1px solid var(--border);
+        font-size: 14px;
+      }
+      .countdown-display {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        text-align: center;
+        margin: 20px 0;
+      }
+      .countdown-unit {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px 10px;
+      }
+      .countdown-unit .number {
+        font-size: 36px;
+        font-weight: 800;
+        color: var(--primary);
+      }
+      .countdown-unit .label {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 5px;
+        text-transform: uppercase;
+      }
+      .age-result {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 20px;
+      }
+      .age-unit {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        text-align: center;
+      }
+      .age-unit .number {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--primary);
+      }
+      .age-unit .label {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 5px;
+      }
+      .tip-result {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 20px;
+      }
+      .tip-box {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 18px;
+        text-align: center;
+      }
+      .tip-box .value {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--primary);
+      }
+      .tip-box .label {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 5px;
+      }
+      .affirmation-card {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--secondary) 100%
+        );
+        border-radius: var(--radius);
+        padding: 40px 30px;
+        text-align: center;
+        color: white;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+      .affirmation-card::before {
+        content: "💫";
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 30px;
+        opacity: 0.3;
+      }
+      .affirmation-text {
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.5;
+        position: relative;
+        z-index: 1;
+      }
+      .goal-item {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        margin-bottom: 12px;
+      }
+      .goal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .goal-header h4 {
+        font-size: 16px;
+      }
+      .goal-delete {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(225, 112, 85, 0.15);
+        color: var(--danger);
+        cursor: pointer;
+        font-size: 14px;
+        transition: var(--transition);
+      }
+      .goal-delete:hover {
+        background: var(--danger);
+        color: white;
+      }
+      .goal-progress {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 10px;
+      }
+      .goal-progress .progress-bar {
+        flex: 1;
+      }
+      .goal-progress .percent {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--primary);
+        min-width: 40px;
+      }
+      .setting-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        margin-bottom: 8px;
+      }
+      .setting-info h4 {
+        font-size: 14px;
+        margin-bottom: 2px;
+      }
+      .setting-info p {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      @media (max-width: 480px) {
+        .budget-overview {
+          grid-template-columns: 1fr;
+        }
+        .water-glasses {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        .countdown-display {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        .age-result {
+          grid-template-columns: 1fr;
+        }
+        .tip-result {
+          grid-template-columns: 1fr;
+        }
+        .text-tools-stats {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .timer-circle {
+          width: 200px;
+          height: 200px;
+        }
+        .timer-circle .time {
+          font-size: 36px;
+        }
+        .palette-colors {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        .decision-options {
+          gap: 6px;
+        }
+        .quick-actions {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .fade-in {
+        animation: fadeIn 0.4s ease;
+      }
+      .slide-up {
+        animation: slideUp 0.4s ease;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--border);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 20px auto;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="app-header">
+      <div style="display: flex; align-items: center">
+        <!-- YANGI: BACK TUGMASI -->
+        <button
+          class="back-btn"
+          id="backBtn"
+          onclick="goBack()"
+          aria-label="Orqaga qaytish"
+        >
+          ←
+        </button>
+        <div class="app-logo">Whole<span>Life</span></div>
+      </div>
+      <div class="header-actions">
+        <button
+          class="icon-btn"
+          onclick="toggleTheme()"
+          id="themeBtn"
+          aria-label="Toggle dark mode"
+        >
+          🌙
+        </button>
+        <button
+          class="icon-btn"
+          onclick="showPage('settings')"
+          aria-label="Settings"
+        >
+          ⚙️
+        </button>
+      </div>
+    </header>
+    <div class="search-container">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search features, tasks, notes..."
+          oninput="searchFeatures()"
+        />
+      </div>
+    </div>
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="welcome-banner">
+        <h2 id="greeting">Good Morning! 👋</h2>
+        <p id="greetingSub">Ready to conquer the day?</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-value" id="stat-tasks">0</div>
+          <div class="stat-label">Tasks Done</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-value" id="stat-balance">$0</div>
+          <div class="stat-label">Balance</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📝</div>
+          <div class="stat-value" id="stat-notes">0</div>
+          <div class="stat-label">Notes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-value" id="stat-streak">0</div>
+          <div class="stat-label">Day Streak</div>
+        </div>
+      </div>
+      <div class="section-title">⚡ Quick Actions</div>
+      <div class="quick-actions">
+        <div class="quick-action-btn" onclick="showPage('todo')">
+          <div class="qa-icon">✅</div>
+          <div class="qa-label">Tasks</div>
+        </div>
+        <div class="quick-action-btn" onclick="showPage('budget')">
+          <div class="qa-icon">💰</div>
+          <div class="qa-label">Budget</div>
+        </div>
+        <div class="quick-action-btn" onclick="showPage('notes')">
+          <div class="qa-icon">📝</div>
+          <div class="qa-label">Notes</div>
+        </div>
+        <div class="quick-action-btn" onclick="showPage('water')">
+          <div class="qa-icon">💧</div>
+          <div class="qa-label">Water</div>
+        </div>
+        <div class="quick-action-btn" onclick="showPage('pomodoro')">
+          <div class="qa-icon">⏱️</div>
+          <div class="qa-label">Focus</div>
+        </div>
+        <div class="quick-action-btn" onclick="showPage('mood')">
+          <div class="qa-icon">😊</div>
+          <div class="qa-label">Mood</div>
+        </div>
+        <div class="quick-action-btn" onclick="showPage('diary')">
+          <div class="qa-icon">📖</div>
+          <div class="qa-label">Diary</div>
+        </div>
+        <div class="quick-action-btn" onclick="showPage('habits')">
+          <div class="qa-icon">🎯</div>
+          <div class="qa-label">Habits</div>
+        </div>
+      </div>
+      <div class="section-title">📋 Today's Tasks</div>
+      <div id="dash-tasks">
+        <div class="empty-state">
+          <div class="icon">📋</div>
+          <h4>No tasks yet</h4>
+          <p>Add tasks to get started</p>
+        </div>
+      </div>
+    </div>
+    <!-- TODO -->
+    <div class="page" id="page-todo">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">✅ Task Manager</div>
+          <span class="badge" id="todo-count">0</span>
+        </div>
+        <div class="todo-input-group">
+          <input
+            type="text"
+            class="input"
+            id="todoInput"
+            placeholder="Add a new task..."
+            onkeypress="if (event.key === 'Enter') addTodo();"
+          />
+          <select class="input" id="todoPriority" style="max-width: 120px">
+            <option value="low">🟢 Low</option>
+            <option value="medium" selected>🟡 Medium</option>
+            <option value="high">🔴 High</option>
+          </select>
+          <select class="input" id="todoCategory" style="max-width: 120px">
+            <option value="personal">👤 Personal</option>
+            <option value="work">💼 Work</option>
+            <option value="health">💪 Health</option>
+            <option value="study">📚 Study</option>
+          </select>
+          <button class="btn btn-primary" onclick="addTodo()">Add</button>
+        </div>
+        <div class="tabs" id="todo-tabs">
+          <button class="tab active" onclick="filterTodos('all', this)">
+            All
+          </button>
+          <button class="tab" onclick="filterTodos('active', this)">
+            Active
+          </button>
+          <button class="tab" onclick="filterTodos('completed', this)">
+            Done
+          </button>
+          <button class="tab" onclick="filterTodos('work', this)">
+            💼 Work
+          </button>
+          <button class="tab" onclick="filterTodos('personal', this)">
+            👤 Personal
+          </button>
+        </div>
+        <div id="todo-list"></div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+          "
+        >
+          <span style="font-size: 13px; color: var(--text-muted)"
+            >Progress:</span
+          >
+          <div style="flex: 1; margin: 0 15px">
+            <div class="progress-bar">
+              <div
+                class="progress-fill"
+                id="todo-progress"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+          <button
+            class="btn btn-outline"
+            onclick="clearCompletedTodos()"
+            style="padding: 8px 12px; font-size: 11px"
+          >
+            Clear Done
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- BUDGET -->
+    <div class="page" id="page-budget">
+      <div class="budget-overview">
+        <div class="budget-card income">
+          <h4>Income</h4>
+          <div class="amount" id="total-income">$0</div>
+        </div>
+        <div class="budget-card expense">
+          <h4>Expense</h4>
+          <div class="amount" id="total-expense">$0</div>
+        </div>
+        <div class="budget-card balance">
+          <h4>Balance</h4>
+          <div class="amount" id="total-balance">$0</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 15px">
+          ➕ Add Transaction
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label>Type</label
+            ><select class="input" id="budget-type">
+              <option value="income">📈 Income</option>
+              <option value="expense">📉 Expense</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Name</label
+            ><input
+              type="text"
+              class="input"
+              id="budget-name"
+              placeholder="e.g., Salary"
+            />
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label>Amount ($)</label
+            ><input
+              type="number"
+              class="input"
+              id="budget-amount"
+              placeholder="0.00"
+            />
+          </div>
+          <div class="input-group">
+            <label>Category</label
+            ><select class="input" id="budget-cat">
+              <option value="food">🍔 Food</option>
+              <option value="transport">🚗 Transport</option>
+              <option value="shopping">🛍️ Shopping</option>
+              <option value="bills">📄 Bills</option>
+              <option value="entertainment">🎬 Entertainment</option>
+              <option value="health">🏥 Health</option>
+              <option value="salary">💰 Salary</option>
+              <option value="other">📦 Other</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="addTransaction()">
+          💾 Save Transaction
+        </button>
+      </div>
+      <div id="transaction-list"></div>
+    </div>
+    <!-- NOTES -->
+    <div class="page" id="page-notes">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 15px;
+        "
+      >
+        <div class="section-title" style="margin-bottom: 0">📝 Notes</div>
+        <button class="btn btn-primary" onclick="openNoteModal()">
+          + New Note
+        </button>
+      </div>
+      <div class="notes-grid" id="notes-grid"></div>
+    </div>
+    <!-- POMODORO -->
+    <div class="page" id="page-pomodoro">
+      <div class="pomodoro-container">
+        <div class="tabs" style="justify-content: center">
+          <button class="tab active" onclick="setPomodoro('work', this)">
+            🎯 Work 25m
+          </button>
+          <button class="tab" onclick="setPomodoro('short', this)">
+            ☕ Short 5m
+          </button>
+          <button class="tab" onclick="setPomodoro('long', this)">
+            🌴 Long 15m
+          </button>
+        </div>
+        <div class="timer-circle" id="timerCircle">
+          <div class="time" id="timerTime">25:00</div>
+          <div class="label" id="timerLabel">Focus Time</div>
+        </div>
+        <div class="timer-controls">
+          <button class="timer-btn secondary" onclick="resetTimer()">🔄</button>
+          <button
+            class="timer-btn play"
+            id="timerPlayBtn"
+            onclick="toggleTimer()"
+          >
+            ▶️
+          </button>
+          <button class="timer-btn secondary" onclick="skipTimer()">⏭️</button>
+        </div>
+        <div class="grid grid-3">
+          <div class="stat-card">
+            <div class="stat-value" id="pomo-completed">0</div>
+            <div class="stat-label">Sessions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="pomo-minutes">0</div>
+            <div class="stat-label">Minutes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="pomo-streak">0</div>
+            <div class="stat-label">Streak</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- CALCULATOR -->
+    <div class="page" id="page-calculator">
+      <div class="card">
+        <div class="tabs" style="justify-content: center; margin-bottom: 15px">
+          <button class="tab active" onclick="setCalcMode('basic', this)">
+            Basic
+          </button>
+          <button class="tab" onclick="setCalcMode('scientific', this)">
+            Scientific
+          </button>
+        </div>
+        <div class="calculator">
+          <div class="calc-display">
+            <div class="calc-expression" id="calcExpr"></div>
+            <div class="calc-result" id="calcResult">0</div>
+          </div>
+          <div class="calc-grid" id="calcGrid">
+            <button class="calc-btn clear" onclick="calcClear()">C</button>
+            <button class="calc-btn clear" onclick="calcBackspace()">⌫</button>
+            <button class="calc-btn operator" onclick="calcInput('%')">
+              %
+            </button>
+            <button class="calc-btn operator" onclick="calcInput('/')">
+              ÷
+            </button>
+            <button class="calc-btn" onclick="calcInput('7')">7</button>
+            <button class="calc-btn" onclick="calcInput('8')">8</button>
+            <button class="calc-btn" onclick="calcInput('9')">9</button>
+            <button class="calc-btn operator" onclick="calcInput('*')">
+              ×
+            </button>
+            <button class="calc-btn" onclick="calcInput('4')">4</button>
+            <button class="calc-btn" onclick="calcInput('5')">5</button>
+            <button class="calc-btn" onclick="calcInput('6')">6</button>
+            <button class="calc-btn operator" onclick="calcInput('-')">
+              −
+            </button>
+            <button class="calc-btn" onclick="calcInput('1')">1</button>
+            <button class="calc-btn" onclick="calcInput('2')">2</button>
+            <button class="calc-btn" onclick="calcInput('3')">3</button>
+            <button class="calc-btn operator" onclick="calcInput('+')">
+              +
+            </button>
+            <button
+              class="calc-btn"
+              style="grid-column: span 2"
+              onclick="calcInput('0')"
+            >
+              0
+            </button>
+            <button class="calc-btn" onclick="calcInput('.')">.</button>
+            <button class="calc-btn equals" onclick="calcEquals()">=</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- PASSWORD GENERATOR -->
+    <div class="page" id="page-password">
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 15px">
+          🔐 Password Generator
+        </div>
+        <div class="pass-display">
+          <div class="pass-text" id="passText">Generate a password</div>
+          <button
+            class="icon-btn"
+            onclick="copyPassword()"
+            style="flex-shrink: 0"
+          >
+            📋
+          </button>
+        </div>
+        <div class="pass-options">
+          <div class="pass-option">
+            <label>Length: <span id="passLenVal">16</span></label
+            ><input
+              type="range"
+              id="passLen"
+              min="4"
+              max="64"
+              value="16"
+              oninput="updatePassLen()"
+            />
+          </div>
+          <div class="pass-option">
+            <label>Uppercase (A-Z)</label
+            ><label class="toggle"
+              ><input type="checkbox" id="passUpper" checked /><span
+                class="toggle-slider"
+              ></span
+            ></label>
+          </div>
+          <div class="pass-option">
+            <label>Lowercase (a-z)</label
+            ><label class="toggle"
+              ><input type="checkbox" id="passLower" checked /><span
+                class="toggle-slider"
+              ></span
+            ></label>
+          </div>
+          <div class="pass-option">
+            <label>Numbers (0-9)</label
+            ><label class="toggle"
+              ><input type="checkbox" id="passNums" checked /><span
+                class="toggle-slider"
+              ></span
+            ></label>
+          </div>
+          <div class="pass-option">
+            <label>Symbols (!@#$)</label
+            ><label class="toggle"
+              ><input type="checkbox" id="passSyms" checked /><span
+                class="toggle-slider"
+              ></span
+            ></label>
+          </div>
+        </div>
+        <div style="margin-bottom: 15px">
+          <div style="display: flex; justify-content: space-between">
+            <span style="font-weight: 600">Strength</span
+            ><span id="passStrengthText" style="font-weight: 600">—</span>
+          </div>
+          <div class="strength-bar">
+            <div
+              class="strength-fill"
+              id="passStrengthBar"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="generatePassword()">
+          🔄 Generate New Password
+        </button>
+      </div>
+    </div>
+    <!-- UNIT CONVERTER -->
+    <div class="page" id="page-converter">
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 15px">
+          🔄 Unit Converter
+        </div>
+        <div class="tabs" style="flex-wrap: wrap">
+          <button class="tab active" onclick="setConvType('length', this)">
+            📏 Length
+          </button>
+          <button class="tab" onclick="setConvType('weight', this)">
+            ⚖️ Weight
+          </button>
+          <button class="tab" onclick="setConvType('temp', this)">
+            🌡️ Temp
+          </button>
+          <button class="tab" onclick="setConvType('data', this)">
+            💾 Data
+          </button>
+          <button class="tab" onclick="setConvType('time', this)">
+            ⏰ Time
+          </button>
+          <button class="tab" onclick="setConvType('speed', this)">
+            🚀 Speed
+          </button>
+          <button class="tab" onclick="setConvType('area', this)">
+            📐 Area
+          </button>
+          <button class="tab" onclick="setConvType('volume', this)">
+            🧊 Volume
+          </button>
+        </div>
+        <div class="converter-box">
+          <div class="converter-row">
+            <div class="converter-input-group">
+              <label>From</label
+              ><input
+                type="number"
+                class="input"
+                id="convInput"
+                value="1"
+                oninput="convertUnit()"
+              /><select
+                class="input"
+                id="convFrom"
+                onchange="convertUnit()"
+                style="margin-top: 8px"
+              ></select>
+            </div>
+            <button
+              class="swap-btn"
+              onclick="swapUnits()"
+              style="margin-top: 20px"
+            >
+              🔄
+            </button>
+            <div class="converter-input-group">
+              <label>To</label
+              ><input
+                type="number"
+                class="input"
+                id="convOutput"
+                readonly
+              /><select
+                class="input"
+                id="convTo"
+                onchange="convertUnit()"
+                style="margin-top: 8px"
+              ></select>
+            </div>
+          </div>
+          <div class="conv-result-box">
+            <div class="value" id="convResult">—</div>
+            <div class="label" id="convResultLabel">Enter a value</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- HABITS -->
+    <div class="page" id="page-habits">
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 15px">
+          🎯 Habit Tracker
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label>Habit Name</label
+            ><input
+              type="text"
+              class="input"
+              id="habitName"
+              placeholder="e.g., Read books"
+            />
+          </div>
+          <div class="input-group">
+            <label>Emoji</label
+            ><select class="input" id="habitEmoji">
+              <option value="📚">📚</option>
+              <option value="🏃">🏃</option>
+              <option value="💧">💧</option>
+              <option value="🧘">🧘</option>
+              <option value="💪">💪</option>
+              <option value="🎵">🎵</option>
+              <option value="📝">📝</option>
+              <option value="🥗">🥗</option>
+              <option value="😴">😴</option>
+              <option value="💻">💻</option>
+            </select>
+          </div>
+          <button
+            class="btn btn-primary"
+            onclick="addHabit()"
+            style="align-self: flex-end"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+      <div id="habits-list"></div>
+    </div>
+    <!-- CALENDAR -->
+    <div class="page" id="page-calendar">
+      <div class="card">
+        <div class="calendar-header">
+          <button class="cal-nav" onclick="changeMonth(-1)">◀</button>
+          <h3 id="calMonthYear">January 2026</h3>
+          <button class="cal-nav" onclick="changeMonth(1)">▶</button>
+        </div>
+        <div class="cal-weekdays">
+          <div class="cal-weekday">Sun</div>
+          <div class="cal-weekday">Mon</div>
+          <div class="cal-weekday">Tue</div>
+          <div class="cal-weekday">Wed</div>
+          <div class="cal-weekday">Thu</div>
+          <div class="cal-weekday">Fri</div>
+          <div class="cal-weekday">Sat</div>
+        </div>
+        <div class="cal-days" id="calDays"></div>
+      </div>
+      <div class="card" id="events-section" style="display: none">
+        <div class="card-title" style="margin-bottom: 10px">
+          📅 Events for <span id="eventsDate"></span>
+        </div>
+        <div class="input-group">
+          <label>Add Event</label>
+          <div style="display: flex; gap: 8px">
+            <input
+              type="text"
+              class="input"
+              id="eventInput"
+              placeholder="Event title"
+              onkeypress="if (event.key === 'Enter') addEvent();"
+            /><button class="btn btn-primary" onclick="addEvent()">Add</button>
+          </div>
+        </div>
+        <div id="events-list"></div>
+      </div>
+    </div>
+    <!-- BREATHING -->
+    <div class="page" id="page-breathing">
+      <div class="card" style="text-align: center">
+        <div
+          class="card-title"
+          style="justify-content: center; margin-bottom: 20px"
+        >
+          🫁 Breathing Exercise
+        </div>
+        <div class="tabs" style="justify-content: center">
+          <button class="tab active" onclick="setBreathing('4-7-8', this)">
+            4-7-8 Relax
+          </button>
+          <button class="tab" onclick="setBreathing('box', this)">
+            Box 4-4-4-4
+          </button>
+          <button class="tab" onclick="setBreathing('calm', this)">
+            Calm 4-4-6
+          </button>
+        </div>
+        <div class="breathing-circle" id="breathCircle">
+          <span id="breathText">Tap to Start</span>
+        </div>
+        <p
+          style="color: var(--text-muted); margin-bottom: 20px"
+          id="breathPhase"
+        >
+          Press start to begin breathing exercise
+        </p>
+        <div style="display: flex; justify-content: center; gap: 12px">
+          <button
+            class="btn btn-primary"
+            id="breathBtn"
+            onclick="toggleBreathing()"
+          >
+            ▶️ Start
+          </button>
+          <button class="btn btn-outline" onclick="resetBreathing()">
+            🔄 Reset
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- BMI CALCULATOR -->
+    <div class="page" id="page-bmi">
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 15px">
+          ⚖️ BMI Calculator
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label>Height (cm)</label
+            ><input
+              type="number"
+              class="input"
+              id="bmiHeight"
+              placeholder="170"
+            />
+          </div>
+          <div class="input-group">
+            <label>Weight (kg)</label
+            ><input
+              type="number"
+              class="input"
+              id="bmiWeight"
+              placeholder="70"
+            />
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="calculateBMI()">
+          Calculate BMI
+        </button>
+        <div id="bmiResult"></div>
+      </div>
+    </div>
+    <!-- WATER TRACKER -->
+    <div class="page" id="page-water">
+      <div class="card" style="text-align: center">
+        <div
+          class="card-title"
+          style="justify-content: center; margin-bottom: 10px"
+        >
+          💧 Water Tracker
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 15px">
+          Goal: 8 glasses (2 liters) per day
+        </p>
+        <div
+          style="
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 5px;
+          "
+        >
+          <span id="waterCount">0</span>/8
+        </div>
+        <div style="color: var(--text-muted); margin-bottom: 15px" id="waterMl">
+          0 ml
+        </div>
+        <div class="water-glasses" id="waterGlasses"></div>
+        <div class="progress-bar" style="margin: 15px 0">
+          <div
+            class="progress-fill"
+            id="waterProgress"
+            style="width: 0%; background: var(--secondary)"
+          ></div>
+        </div>
+      </div>
+    </div>
+    <!-- MOOD TRACKER -->
+    <div class="page" id="page-mood">
+      <div class="card" style="text-align: center">
+        <div
+          class="card-title"
+          style="justify-content: center; margin-bottom: 10px"
+        >
+          😊 Mood Tracker
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 15px">
+          How are you feeling today?
+        </p>
+        <div class="mood-options">
+          <button class="mood-btn" onclick="selectMood(event, 'amazing')">
+            🤩
+          </button>
+          <button class="mood-btn" onclick="selectMood(event, 'happy')">
+            😊
+          </button>
+          <button class="mood-btn" onclick="selectMood(event, 'okay')">
+            😐
+          </button>
+          <button class="mood-btn" onclick="selectMood(event, 'sad')">
+            😢
+          </button>
+          <button class="mood-btn" onclick="selectMood(event, 'angry')">
+            😡
+          </button>
+        </div>
+        <div
+          id="moodSelected"
+          style="margin: 15px 0; font-size: 16px; font-weight: 600"
+        ></div>
+        <div class="input-group">
+          <label>What made you feel this way? (optional)</label
+          ><textarea
+            class="input"
+            id="moodNote"
+            placeholder="Write your thoughts..."
+          ></textarea>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="saveMood()">
+          💾 Save Mood
+        </button>
+      </div>
+      <div id="moodHistory"></div>
+    </div>
+    <!-- DIARY -->
+    <div class="page" id="page-diary">
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 15px">
+          📖 Daily Journal
+        </div>
+        <div class="input-group">
+          <label>Date</label><input type="date" class="input" id="diaryDate" />
+        </div>
+        <div class="input-group">
+          <label>Your Thoughts</label
+          ><textarea
+            class="input"
+            id="diaryContent"
+            placeholder="What happened today? How did you feel?"
+            style="min-height: 150px"
+          ></textarea>
+        </div>
+        <div class="input-group">
+          <label>Mood</label
+          ><select class="input" id="diaryMood">
+            <option value="😊">😊 Happy</option>
+            <option value="😐">😐 Neutral</option>
+            <option value="😢">😢 Sad</option>
+            <option value="😡">😡 Angry</option>
+            <option value="🤩">🤩 Amazing</option>
+            <option value="😴">😴 Tired</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="saveDiary()">
+          💾 Save Entry
+        </button>
+      </div>
+      <div id="diary-entries"></div>
+    </div>
+    <!-- TEXT TOOLS -->
+    <div class="page" id="page-texttools">
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 15px">📝 Text Tools</div>
+        <textarea
+          class="input"
+          id="textInput"
+          placeholder="Type or paste your text here..."
+          oninput="analyzeText()"
+          style="min-height: 150px"
+        ></textarea>
+        <div class="text-tools-stats" style="margin-top: 15px">
+          <div class="text-stat">
+            <div class="value" id="textChars">0</div>
+            <div class="label">Characters</div>
+          </div>
+          <div class="text-stat">
+            <div class="value" id="textWords">0</div>
+            <div class="label">Words</div>
+          </div>
+          <div class="text-stat">
+            <div class="value" id="textSentences">0</div>
+            <div class="label">Sentences</div>
+          </div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px">
+          <button class="btn btn-outline" onclick="textToUpperCase()">
+            A→a UPPER
+          </button>
+          <button class="btn btn-outline" onclick="textToLowerCase()">
+            a→A lower
+          </button>
+          <button class="btn btn-outline" onclick="textToTitleCase()">
+            Title Case
+          </button>
+          <button class="btn btn-outline" onclick="textReverse()">
+            🔄 Reverse
+          </button>
+          <button class="btn btn-outline" onclick="textCopy()">📋 Copy</button>
+          <button class="btn btn-outline" onclick="textClear()">
+            🗑️ Clear
+          </button>
+          <button class="btn btn-outline" onclick="textRemoveExtraSpaces()">
+            Trim Spaces
+          </button>
+          <button class="btn btn-outline" onclick="textCountLines()">
+            📄 Count Lines
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- COLOR PALETTE -->
+    <div class="page" id="page-colors">
+      <div class="card" style="text-align: center">
+        <div
+          class="card-title"
+          style="justify-content: center; margin-bottom: 15px"
+        >
+          🎨 Color Palette Generator
+        </div>
+        <div class="palette-colors" id="paletteColors"></div>
+        <div class="input-row">
+          <button class="btn btn-primary btn-block" onclick="generatePalette()">
+            🎲 Generate New Palette
+          </button>
+          <button class="btn btn-outline btn-block" onclick="copyPalette()">
+            📋 Copy Colors
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- DECISION MAKER -->
+    <div class="page" id="page-decision">
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 15px">
+          🎲 Decision Maker
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label>Add Option</label>
+            <div style="display: flex; gap: 8px">
+              <input
+                type="text"
+                class="input"
+                id="decisionInput"
+                placeholder="e.g., Pizza"
+                onkeypress="if (event.key === 'Enter') addDecisionOption();"
+              /><button class="btn btn-primary" onclick="addDecisionOption()">
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="decision-options" id="decisionOptions"></div>
+        <button
+          class="btn btn-primary btn-block"
+          onclick="makeDecision()"
+          style="margin-top: 10px"
+        >
+          🎲 Decide for Me!
+        </button>
+        <div id="decisionResult"></div>
+      </div>
+    </div>
+    <!-- STOPWATCH -->
+    <div class="page" id="page-stopwatch">
+      <div class="card" style="text-align: center">
+        <div
+          class="card-title"
+          style="justify-content: center; margin-bottom: 10px"
+        >
+          ⏱️ Stopwatch
+        </div>
+        <div class="stopwatch-display">
+          <div class="stopwatch-time" id="swTime">
+            00:00:00<span class="stopwatch-ms">.00</span>
+          </div>
+        </div>
+        <div class="stopwatch-controls">
+          <button class="btn btn-outline" onclick="resetStopwatch()">
+            🔄 Reset
+          </button>
+          <button
+            class="btn btn-primary"
+            id="swStartBtn"
+            onclick="toggleStopwatch()"
+          >
+            ▶️ Start
+          </button>
+          <button class="btn btn-outline" onclick="addLap()">🏁 Lap</button>
+        </div>
+        <div id="laps" style="margin-top: 15px"></div>
+      </div>
+    </div>
+    <!-- COUNTDOWN TIMER -->
+    <div class="page" id="page-countdown">
+      <div class="card" style="text-align: center">
+        <div
+          class="card-title"
+          style="justify-content: center; margin-bottom: 15px"
+        >
+          ⏰ Countdown Timer
+        </div>
+        <div
+          class="input-row"
+          style="justify-content: center; margin-bottom: 15px"
+        >
+          <div class="input-group" style="max-width: 100px">
+            <label>Hours</label
+            ><input
+              type="number"
+              class="input"
+              id="cdHours"
+              value="0"
+              min="0"
+            />
+          </div>
+          <div class="input-group" style="max-width: 100px">
+            <label>Minutes</label
+            ><input
+              type="number"
+              class="input"
+              id="cdMinutes"
+              value="5"
+              min="0"
+              max="59"
+            />
+          </div>
+          <div class="input-group" style="max-width: 100px">
+            <label>Seconds</label
+            ><input
+              type="number"
+              class="input"
+              id="cdSeconds"
+              value="0"
+              min="0"
+              max="59"
+            />
+          </div>
+        </div>
+        <div class="countdown-display" id="countdownDisplay">
+          <div class="countdown-unit">
+            <div class="number" id="cdH">00</div>
+            <div class="label">Hours</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="number" id="cdM">05</div>
+            <div class="label">Minutes</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="number" id="cdS">00</div>
+            <div class="label">Seconds</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="number">🎯</div>
+            <div class="label">Countdown</div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center; gap: 12px">
+          <button
+            class="btn btn-primary"
+            id="cdStartBtn"
+            onclick="toggleCountdown()"
+          >
+            ▶️ Start
+          </button>
+          <button class="btn btn-outline" onclick="resetCountdown()">
+            🔄 Reset
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- AGE CALCULATOR -->
+    <div class="page" id="page-age">
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 15px">
+          🎂 Age Calculator
+        </div>
+        <div class="input-group">
+          <label>Date of Birth</label
+          ><input type="date" class="input" id="ageDob" />
+        </div>
+        <button class="btn btn-primary btn-block" onclick="calculateAge()">
+          Calculate Age
+        </button>
+        <div id="ageResult"></div>
+      </div>
+    </div>
+    <!-- TIP CALCULATOR -->
+    <div class="page" id="page-tip">
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 15px">
+          💵 Tip Calculator
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label>Bill Amount ($)</label
+            ><input
+              type="number"
+              class="input"
+              id="tipBill"
+              placeholder="50.00"
+              oninput="calculateTip()"
+            />
+          </div>
+          <div class="input-group">
+            <label>Tip Percentage (%)</label
+            ><input
+              type="range"
+              id="tipPercent"
+              min="0"
+              max="50"
+              value="15"
+              oninput="
+                document.getElementById('tipPercentVal').textContent =
+                  this.value + '%';
+                calculateTip();
+              "
+            />
+          </div>
+        </div>
+        <div style="text-align: center; margin-bottom: 15px">
+          <span style="font-size: 24px; font-weight: 700"
+            >Tip:
+            <span id="tipPercentVal" style="color: var(--primary)"
+              >15%</span
+            ></span
+          >
+        </div>
+        <div class="input-group">
+          <label>Split Between</label
+          ><input
+            type="number"
+            class="input"
+            id="tipSplit"
+            value="1"
+            min="1"
+            oninput="calculateTip()"
+          />
+        </div>
+        <div id="tipResult"></div>
+      </div>
+    </div>
+    <!-- AFFIRMATIONS -->
+    <div class="page" id="page-affirmations">
+      <div class="affirmation-card">
+        <div class="affirmation-text" id="affirmationText">
+          I am capable of achieving anything I set my mind to.
+        </div>
+      </div>
+      <div style="text-align: center">
+        <button class="btn btn-primary" onclick="newAffirmation()">
+          ✨ New Affirmation
+        </button>
+      </div>
+      <div style="margin-top: 20px">
+        <div class="section-title">📜 All Affirmations</div>
+        <div id="affirmationsList"></div>
+      </div>
+    </div>
+    <!-- GOALS -->
+    <div class="page" id="page-goals">
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 15px">
+          🎯 Goals Tracker
+        </div>
+        <div class="input-group">
+          <label>Goal Name</label
+          ><input
+            type="text"
+            class="input"
+            id="goalName"
+            placeholder="e.g., Learn Spanish"
+          />
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label>Target</label
+            ><input
+              type="number"
+              class="input"
+              id="goalTarget"
+              placeholder="100"
+            />
+          </div>
+          <div class="input-group">
+            <label>Current Progress</label
+            ><input
+              type="number"
+              class="input"
+              id="goalCurrent"
+              placeholder="0"
+            />
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="addGoal()">
+          ➕ Add Goal
+        </button>
+      </div>
+      <div id="goals-list"></div>
+    </div>
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 15px">⚙️ Settings</div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>🌙 Dark Mode</h4>
+            <p>Toggle dark/light theme</p>
+          </div>
+          <label class="toggle"
+            ><input
+              type="checkbox"
+              id="settingDark"
+              onchange="toggleTheme()"
+              checked /><span class="toggle-slider"></span
+          ></label>
+        </div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>📊 Export All Data</h4>
+            <p>Download your data as JSON</p>
+          </div>
+          <button class="btn btn-outline" onclick="exportData()">
+            📥 Export
+          </button>
+        </div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>📂 Import Data</h4>
+            <p>Restore from backup</p>
+          </div>
+          <button
+            class="btn btn-outline"
+            onclick="document.getElementById('importFile').click()"
+          >
+            📤 Import</button
+          ><input
+            type="file"
+            id="importFile"
+            accept=".json"
+            style="display: none"
+            onchange="importData(event)"
+          />
+        </div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>🗑️ Clear All Data</h4>
+            <p>Remove everything permanently</p>
+          </div>
+          <button class="btn btn-danger" onclick="clearAllData()">
+            🗑️ Clear
+          </button>
+        </div>
+      </div>
+      <div class="card" style="text-align: center">
+        <div style="font-size: 14px; color: var(--text-muted)">
+          <p
+            style="
+              font-size: 20px;
+              font-weight: 800;
+              color: var(--primary);
+              margin-bottom: 8px;
+            "
+          >
+            OmniLife v1.0
+          </p>
+          <p>All-in-One Life Utility Suite</p>
+          <p style="margin-top: 8px">Made with ❤️ for humanity</p>
+        </div>
+      </div>
+    </div>
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+      <div class="nav-item active" onclick="showPage('dashboard')">
+        <span class="nav-icon">🏠</span><span>Home</span>
+      </div>
+      <div class="nav-item" onclick="showPage('todo')">
+        <span class="nav-icon">✅</span><span>Tasks</span>
+      </div>
+      <div class="nav-item" onclick="showPage('budget')">
+        <span class="nav-icon">💰</span><span>Budget</span>
+      </div>
+      <div class="nav-item" onclick="showPage('notes')">
+        <span class="nav-icon">📝</span><span>Notes</span>
+      </div>
+      <div class="nav-item" onclick="showMore()">
+        <span class="nav-icon">⚡</span><span>More</span>
+      </div>
+    </nav>
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+      <div
+        class="modal"
+        id="modalContent"
+        onclick="event.stopPropagation()"
+      ></div>
+    </div>
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+      // ============================================
+      // GLOBAL STATE & DATA
+      // ============================================
+      const DB = {
+        get(key, def = []) {
+          try {
+            return JSON.parse(localStorage.getItem("omni_" + key)) || def;
+          } catch (e) {
+            return def;
+          }
+        },
+        set(key, val) {
+          try {
+            localStorage.setItem("omni_" + key, JSON.stringify(val));
+          } catch (e) {
+            showToast("Storage error: " + e.message, "error");
+          }
+        },
+        getInt(key, def = 0) {
+          return parseInt(localStorage.getItem("omni_" + key)) || def;
+        },
+        setInt(key, val) {
+          try {
+            localStorage.setItem("omni_" + key, val);
+          } catch (e) {
+            showToast("Storage error: " + e.message, "error");
+          }
+        },
+      };
+      let todos = DB.get("todos");
+      let transactions = DB.get("transactions");
+      let notes = DB.get("notes");
+      let habits = DB.get("habits");
+      let events = DB.get("events", {});
+      let moods = DB.get("moods");
+      let diaries = DB.get("diaries");
+      let goals = DB.get("goals");
+      let waterData = DB.getInt("water", 0);
+      let waterDate = DB.get("waterDate", "");
+      let pomoCount = DB.getInt("pomodoros");
+      let pomoMins = DB.getInt("pomomins");
+      let pomoStreak = DB.getInt("pomostreak");
+      let currentStreak = DB.getInt("streak");
+      let selectedMood = "";
+      function saveData() {
+        try {
+          DB.set("todos", todos);
+          DB.set("transactions", transactions);
+          DB.set("notes", notes);
+          DB.set("habits", habits);
+          DB.set("events", events);
+          DB.set("moods", moods);
+          DB.set("diaries", diaries);
+          DB.set("goals", goals);
+          DB.setInt("pomodoros", pomoCount);
+          DB.setInt("pomomins", pomoMins);
+          DB.setInt("pomostreak", pomoStreak);
+          DB.setInt("streak", currentStreak);
+        } catch (e) {
+          showToast("Error saving data: " + e.message, "error");
+        }
+      }
+      function updateStats() {
+        document.getElementById("stat-tasks").textContent = todos.filter(
+          (t) => t.done,
+        ).length;
+        const inc = transactions
+          .filter((t) => t.type === "income")
+          .reduce((s, t) => s + t.amount, 0);
+        const exp = transactions
+          .filter((t) => t.type === "expense")
+          .reduce((s, t) => s + t.amount, 0);
+        document.getElementById("stat-balance").textContent =
+          "$" + (inc - exp).toLocaleString();
+        document.getElementById("stat-notes").textContent = notes.length;
+        document.getElementById("stat-streak").textContent = currentStreak;
+      }
+      // ============================================
+      // NAVIGATION (YANGILANGAN - BACK TUGMASI VA HISTORY BILAN)
+      // ============================================
+      let activeIntervals = {
+        timer: null,
+        breath: null,
+        stopwatch: null,
+        countdown: null,
+      };
+      let currentPage = "dashboard";
+      let pageHistory = ["dashboard"];
+
+      function showPage(id, addToHistory = true) {
+        // Clear all intervals when switching pages
+        if (activeIntervals.timer) {
+          clearInterval(activeIntervals.timer);
+          activeIntervals.timer = null;
+          timerRunning = false;
+        }
+        if (activeIntervals.breath) {
+          clearInterval(activeIntervals.breath);
+          activeIntervals.breath = null;
+          breathRunning = false;
+        }
+        if (activeIntervals.stopwatch) {
+          clearInterval(activeIntervals.stopwatch);
+          activeIntervals.stopwatch = null;
+          swRunning = false;
+        }
+        if (activeIntervals.countdown) {
+          clearInterval(activeIntervals.countdown);
+          activeIntervals.countdown = null;
+          cdRunning = false;
+        }
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("page-" + id)?.classList.add("active");
+        document
+          .querySelectorAll(".nav-item")
+          .forEach((n) => n.classList.remove("active"));
+        const navMap = { dashboard: 0, todo: 1, budget: 2, notes: 3 };
+        if (navMap[id] !== undefined)
+          document
+            .querySelectorAll(".nav-item")
+            [navMap[id]]?.classList.add("active");
+        window.scrollTo(0, 0);
+
+        // Yangi: Sahifa tarixini boshqarish
+        currentPage = id;
+        if (addToHistory && pageHistory[pageHistory.length - 1] !== id) {
+          pageHistory.push(id);
+          // Browser history'ga qo'shish (telefon back tugmasi uchun)
+          history.pushState({ page: id }, "", "#" + id);
+        }
+
+        // Back tugmasini ko'rsatish/yashirish
+        const backBtn = document.getElementById("backBtn");
+        if (id === "dashboard") {
+          backBtn.classList.remove("visible");
+        } else {
+          backBtn.classList.add("visible");
+        }
+      }
+
+      // Yangi: Orqaga qaytish funksiyasi
+      function goBack() {
+        if (pageHistory.length > 1) {
+          pageHistory.pop(); // Joriy sahifani olib tashlash
+          const prevPage = pageHistory[pageHistory.length - 1];
+          showPage(prevPage, false); // Tarixga qo'shmasdan
+        } else {
+          showPage("dashboard", false);
+        }
+      }
+
+      // Yangi: Telefonning Back tugmasini ushlash
+      window.addEventListener("popstate", function (event) {
+        if (event.state && event.state.page) {
+          // Browser orqaga qaytganda, ilova ichida orqaga qaytish
+          if (pageHistory.length > 1) {
+            pageHistory.pop();
+            const prevPage = pageHistory[pageHistory.length - 1];
+            showPage(prevPage, false);
+          } else {
+            // Agar Dashboard'da bo'lsa, yana bir bor back bossa, history.pushState qilish
+            history.pushState({ page: "dashboard" }, "", "#dashboard");
+            showPage("dashboard", false);
+          }
+        } else {
+          // Agar state bo'lmasa, Dashboard'ga qaytarish
+          history.pushState({ page: "dashboard" }, "", "#dashboard");
+          showPage("dashboard", false);
+        }
+      });
+
+      function showMore() {
+        const features = [
+          { icon: "⏱️", name: "Pomodoro", page: "pomodoro" },
+          { icon: "🧮", name: "Calculator", page: "calculator" },
+          { icon: "🔐", name: "Passwords", page: "password" },
+          { icon: "🔄", name: "Converter", page: "converter" },
+          { icon: "🎯", name: "Habits", page: "habits" },
+          { icon: "📅", name: "Calendar", page: "calendar" },
+          { icon: "🫁", name: "Breathing", page: "breathing" },
+          { icon: "⚖️", name: "BMI", page: "bmi" },
+          { icon: "💧", name: "Water", page: "water" },
+          { icon: "😊", name: "Mood", page: "mood" },
+          { icon: "📖", name: "Diary", page: "diary" },
+          { icon: "📝", name: "Text Tools", page: "texttools" },
+          { icon: "🎨", name: "Colors", page: "colors" },
+          { icon: "🎲", name: "Decider", page: "decision" },
+          { icon: "⏱️", name: "Stopwatch", page: "stopwatch" },
+          { icon: "⏰", name: "Countdown", page: "countdown" },
+          { icon: "🎂", name: "Age Calc", page: "age" },
+          { icon: "💵", name: "Tip Calc", page: "tip" },
+          { icon: "💬", name: "Affirmations", page: "affirmations" },
+          { icon: "🎯", name: "Goals", page: "goals" },
+        ];
+        const html = `
+<h3>⚡ All Features</h3>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:15px;">
+${features
+  .map(
+    (f) => `
+<div style="background:var(--darker);border-radius:12px;padding:15px 10px;text-align:center;cursor:pointer;transition:var(--transition);" onclick="showPage('${f.page}');closeModalDirect();" class="quick-action-btn">
+<div style="font-size:24px;">${f.icon}</div>
+<div style="font-size:11px;font-weight:600;margin-top:5px;">${f.name}</div>
+</div>
+`,
+  )
+  .join("")}
+</div>
+<button class="btn btn-outline btn-block" onclick="closeModalDirect()">Close</button>
+`;
+        document.getElementById("modalContent").innerHTML = html;
+        document.getElementById("modalOverlay").classList.add("active");
+      }
+      function closeModal(e) {
+        if (e.target === document.getElementById("modalOverlay"))
+          closeModalDirect();
+      }
+      function closeModalDirect() {
+        document.getElementById("modalOverlay").classList.remove("active");
+      }
+      // ============================================
+      // THEME
+      // ============================================
+      function toggleTheme() {
+        document.body.classList.toggle("light-mode");
+        const isLight = document.body.classList.contains("light-mode");
+        document.getElementById("themeBtn").textContent = isLight ? "☀️" : "🌙";
+        document.getElementById("settingDark").checked = !isLight;
+        localStorage.setItem("omni_light", isLight);
+      }
+      if (localStorage.getItem("omni_light") === "true") {
+        document.body.classList.add("light-mode");
+        document.getElementById("themeBtn").textContent = "☀️";
+        document.getElementById("settingDark").checked = false;
+      }
+      // ============================================
+      // TOAST NOTIFICATIONS
+      // ============================================
+      function showToast(msg, type = "success") {
+        const c = document.getElementById("toastContainer");
+        const icons = { success: "✅", error: "❌", warning: "⚠️", info: "ℹ️" };
+        const t = document.createElement("div");
+        t.className = "toast " + type;
+        t.innerHTML = `<span>${icons[type] || "✅"}</span><span>${msg}</span>`;
+        c.appendChild(t);
+        setTimeout(() => {
+          t.style.opacity = "0";
+          setTimeout(() => t.remove(), 300);
+        }, 3000);
+      }
+      // ============================================
+      // SEARCH (with debounce)
+      // ============================================
+      let searchTimeout;
+      function searchFeatures() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          const q = document
+            .getElementById("searchInput")
+            .value.toLowerCase()
+            .trim();
+          if (!q) return;
+          const pages = [
+            "dashboard",
+            "todo",
+            "budget",
+            "notes",
+            "pomodoro",
+            "calculator",
+            "password",
+            "converter",
+            "habits",
+            "calendar",
+            "breathing",
+            "bmi",
+            "water",
+            "mood",
+            "diary",
+            "texttools",
+            "colors",
+            "decision",
+            "stopwatch",
+            "countdown",
+            "age",
+            "tip",
+            "affirmations",
+            "goals",
+          ];
+          for (const p of pages) {
+            const el = document.getElementById("page-" + p);
+            if (el && el.textContent.toLowerCase().includes(q)) {
+              showPage(p);
+              break;
+            }
+          }
+        }, 300);
+      }
+      // ============================================
+      // CLOCK & GREETING
+      // ============================================
+      function updateClock() {
+        const h = new Date().getHours();
+        let g = "Good Morning",
+          s = "Start your day strong! ☀️";
+        if (h < 6) {
+          g = "Good Night";
+          s = "Time to rest 🌙";
+        } else if (h < 12) {
+          g = "Good Morning";
+          s = "Start your day strong! ☀️";
+        } else if (h < 17) {
+          g = "Good Afternoon";
+          s = "Keep the momentum going! 🚀";
+        } else if (h < 21) {
+          g = "Good Evening";
+          s = "Wind down and reflect 🌅";
+        } else {
+          g = "Good Night";
+          s = "Time to rest and recharge 🌙";
+        }
+        document.getElementById("greeting").textContent = g + "! 👋";
+        document.getElementById("greetingSub").textContent = s;
+      }
+      updateClock();
+      setInterval(updateClock, 60000);
+      // ============================================
+      // STREAK TRACKING (FIXED)
+      // ============================================
+      function checkStreak() {
+        const today = new Date().toDateString();
+        const last = localStorage.getItem("omni_lastActive");
+        if (last !== today) {
+          if (last) {
+            const lastDate = new Date(last);
+            const diff = (new Date() - lastDate) / 86400000;
+            if (diff <= 1) currentStreak++;
+            else currentStreak = 1;
+          } else currentStreak = 1;
+          localStorage.setItem("omni_lastActive", today);
+          saveData();
+          updateStats();
+        }
+      }
+      checkStreak();
+      // ============================================
+      // TODO SYSTEM
+      // ============================================
+      let todoFilter = "all";
+      function addTodo() {
+        const input = document.getElementById("todoInput");
+        const text = input.value.trim();
+        if (!text) return showToast("Please enter a task!", "error");
+        todos.unshift({
+          id: Date.now(),
+          text,
+          priority: document.getElementById("todoPriority").value,
+          category: document.getElementById("todoCategory").value,
+          done: false,
+          created: new Date().toISOString(),
+        });
+        input.value = "";
+        saveData();
+        renderTodos();
+        updateStats();
+        showToast("Task added! ✅");
+      }
+      function toggleTodo(id) {
+        const t = todos.find((t) => t.id === id);
+        if (t) {
+          t.done = !t.done;
+          saveData();
+          renderTodos();
+          updateStats();
+          if (t.done) showToast("Task completed! 🎉");
+        }
+      }
+      function deleteTodo(id) {
+        todos = todos.filter((t) => t.id !== id);
+        saveData();
+        renderTodos();
+        updateStats();
+      }
+      function clearCompletedTodos() {
+        todos = todos.filter((t) => !t.done);
+        saveData();
+        renderTodos();
+        updateStats();
+        showToast("Completed tasks cleared!");
+      }
+      function filterTodos(filter, btn) {
+        todoFilter = filter;
+        document
+          .querySelectorAll("#todo-tabs .tab")
+          .forEach((t) => t.classList.remove("active"));
+        if (btn) btn.classList.add("active");
+        renderTodos();
+      }
+      function renderTodos() {
+        let list = [...todos];
+        if (todoFilter === "active") list = list.filter((t) => !t.done);
+        else if (todoFilter === "completed") list = list.filter((t) => t.done);
+        else if (["work", "personal", "health", "study"].includes(todoFilter))
+          list = list.filter((t) => t.category === todoFilter);
+        const container = document.getElementById("todo-list");
+        document.getElementById("todo-count").textContent = todos.filter(
+          (t) => !t.done,
+        ).length;
+        const total = todos.length;
+        const done = todos.filter((t) => t.done).length;
+        document.getElementById("todo-progress").style.width = total
+          ? (done / total) * 100 + "%"
+          : "0%";
+        if (list.length === 0) {
+          container.innerHTML =
+            '<div class="empty-state"><div class="icon">📋</div><h4>No tasks found</h4><p>Add a new task above</p></div>';
+        } else {
+          container.innerHTML = list
+            .map(
+              (t) => `
+<div class="todo-item ${t.done ? "done" : ""}">
+<div class="todo-check ${t.done ? "checked" : ""}" onclick="toggleTodo(${t.id})">${t.done ? "✓" : ""}</div>
+<div style="flex:1;"><div class="todo-text">${escHtml(t.text)}</div><div style="font-size:11px;color:var(--text-dim);">${new Date(t.created).toLocaleDateString()}</div></div>
+<span class="priority-tag priority-${t.priority}">${t.priority}</span>
+<button class="todo-delete" onclick="deleteTodo(${t.id})">✕</button>
+</div>
+`,
+            )
+            .join("");
+        }
+        const active = todos.filter((t) => !t.done).slice(0, 3);
+        const dashEl = document.getElementById("dash-tasks");
+        if (active.length === 0) {
+          dashEl.innerHTML =
+            '<div class="empty-state"><div class="icon">📋</div><h4>No tasks</h4><p>Add tasks to get started</p></div>';
+        } else {
+          dashEl.innerHTML = active
+            .map(
+              (t) => `
+<div class="todo-item" onclick="showPage('todo');">
+<div class="todo-check" style="cursor:pointer;">⭕</div>
+<div class="todo-text">${escHtml(t.text)}</div>
+<span class="priority-tag priority-${t.priority}">${t.priority}</span>
+</div>
+`,
+            )
+            .join("");
+        }
+      }
+      // ============================================
+      // BUDGET SYSTEM
+      // ============================================
+      function addTransaction() {
+        const type = document.getElementById("budget-type").value;
+        const name = document.getElementById("budget-name").value.trim();
+        const amount = parseFloat(
+          document.getElementById("budget-amount").value,
+        );
+        const cat = document.getElementById("budget-cat").value;
+        if (!name) return showToast("Please enter a name!", "error");
+        if (!amount || amount <= 0)
+          return showToast("Please enter a valid amount!", "error");
+        transactions.unshift({
+          id: Date.now(),
+          type,
+          name,
+          amount,
+          cat,
+          date: new Date().toISOString(),
+        });
+        document.getElementById("budget-name").value = "";
+        document.getElementById("budget-amount").value = "";
+        saveData();
+        renderTransactions();
+        updateStats();
+        showToast(`${type === "income" ? "Income" : "Expense"} added! 💰`);
+      }
+      function deleteTransaction(id) {
+        transactions = transactions.filter((t) => t.id !== id);
+        saveData();
+        renderTransactions();
+        updateStats();
+      }
+      function renderTransactions() {
+        const inc = transactions
+          .filter((t) => t.type === "income")
+          .reduce((s, t) => s + t.amount, 0);
+        const exp = transactions
+          .filter((t) => t.type === "expense")
+          .reduce((s, t) => s + t.amount, 0);
+        document.getElementById("total-income").textContent =
+          "$" + inc.toLocaleString();
+        document.getElementById("total-expense").textContent =
+          "$" + exp.toLocaleString();
+        document.getElementById("total-balance").textContent =
+          "$" + (inc - exp).toLocaleString();
+        const container = document.getElementById("transaction-list");
+        if (transactions.length === 0) {
+          container.innerHTML =
+            '<div class="empty-state"><div class="icon">💳</div><h4>No transactions</h4><p>Add your first transaction above</p></div>';
+        } else {
+          container.innerHTML = transactions
+            .slice(0, 20)
+            .map(
+              (t) => `
+<div class="transaction-item">
+<div class="transaction-icon ${t.type}">${t.type === "income" ? "📈" : "📉"}</div>
+<div class="transaction-info"><div class="name">${escHtml(t.name)}</div><div class="date">${new Date(t.date).toLocaleDateString()}</div></div>
+<div class="transaction-amount ${t.type}">${t.type === "income" ? "+" : "-"}$${t.amount.toLocaleString()}</div>
+<button class="todo-delete" onclick="deleteTransaction(${t.id})">✕</button>
+</div>
+`,
+            )
+            .join("");
+        }
+      }
+      // ============================================
+      // NOTES SYSTEM
+      // ============================================
+      let editingNoteId = null;
+      let noteColor = "#6c5ce7";
+      function openNoteModal(id = null) {
+        editingNoteId = id;
+        noteColor = "#6c5ce7";
+        const colors = [
+          "#6c5ce7",
+          "#00cec9",
+          "#fd79a8",
+          "#fdcb6e",
+          "#00b894",
+          "#e17055",
+          "#0984e3",
+          "#a29bfe",
+        ];
+        const modal = `
+<h3>${id ? "✏️ Edit Note" : "📝 New Note"}</h3>
+<div class="input-group"><label>Title</label><input type="text" class="input" id="modalNoteTitle" placeholder="Note title..."></div>
+<div class="input-group"><label>Content</label><textarea class="input" id="modalNoteContent" placeholder="Write your note..."></textarea></div>
+<div class="input-group"><label>Color</label>
+<div style="display:flex;gap:8px;flex-wrap:wrap;">
+${colors.map((c) => `<div style="width:30px;height:30px;border-radius:50%;background:${c};cursor:pointer;border:3px solid ${c === noteColor ? "white" : "transparent"};" onclick="noteColor='${c}';this.parentElement.querySelectorAll('div').forEach(d=>d.style.borderColor='transparent');this.style.borderColor='white';"></div>`).join("")}
+</div>
+</div>
+<div class="modal-actions">
+<button class="btn btn-outline" onclick="closeModalDirect()">Cancel</button>
+<button class="btn btn-primary" onclick="saveNote()">💾 Save</button>
+</div>
+`;
+        document.getElementById("modalContent").innerHTML = modal;
+        document.getElementById("modalOverlay").classList.add("active");
+        if (id) {
+          const n = notes.find((n) => n.id === id);
+          document.getElementById("modalNoteTitle").value = n.title;
+          document.getElementById("modalNoteContent").value = n.content;
+          noteColor = n.color;
+        }
+      }
+      function saveNote() {
+        const title = document.getElementById("modalNoteTitle").value.trim();
+        const content = document
+          .getElementById("modalNoteContent")
+          .value.trim();
+        if (!title) return showToast("Please enter a title!", "error");
+        if (!content) return showToast("Please enter content!", "error");
+        if (editingNoteId) {
+          const n = notes.find((n) => n.id === editingNoteId);
+          n.title = title;
+          n.content = content;
+          n.color = noteColor;
+        } else {
+          notes.unshift({
+            id: Date.now(),
+            title,
+            content,
+            color: noteColor,
+            date: new Date().toISOString(),
+          });
+        }
+        saveData();
+        renderNotes();
+        closeModalDirect();
+        updateStats();
+        showToast("Note saved! 📝");
+      }
+      function deleteNote(id) {
+        notes = notes.filter((n) => n.id !== id);
+        saveData();
+        renderNotes();
+        updateStats();
+      }
+      function renderNotes() {
+        const grid = document.getElementById("notes-grid");
+        if (notes.length === 0) {
+          grid.innerHTML =
+            '<div class="empty-state" style="grid-column:1/-1;"><div class="icon">📝</div><h4>No notes yet</h4><p>Create your first note!</p></div>';
+        } else {
+          grid.innerHTML = notes
+            .map(
+              (n) => `
+<div class="note-card">
+<div class="note-accent" style="background:${n.color};"></div>
+<h4>${escHtml(n.title)}</h4>
+<p>${escHtml(n.content)}</p>
+<div class="note-footer">
+<span class="note-date">${new Date(n.date).toLocaleDateString()}</span>
+<div class="note-actions">
+<button onclick="openNoteModal(${n.id})">✏️</button>
+<button onclick="deleteNote(${n.id})">🗑️</button>
+</div>
+</div>
+</div>
+`,
+            )
+            .join("");
+        }
+      }
+      // ============================================
+      // POMODORO TIMER
+      // ============================================
+      let timerInterval = null;
+      let timerRunning = false;
+      let timerSeconds = 25 * 60;
+      let timerTotal = 25 * 60;
+      let pomoMode = "work";
+      function setPomodoro(mode, btn) {
+        pomoMode = mode;
+        clearInterval(timerInterval);
+        timerRunning = false;
+        const times = { work: 1500, short: 300, long: 900 };
+        const labels = {
+          work: "Focus Time",
+          short: "Short Break",
+          long: "Long Break",
+        };
+        timerSeconds = times[mode];
+        timerTotal = times[mode];
+        document.getElementById("timerTime").textContent =
+          formatTime(timerSeconds);
+        document.getElementById("timerLabel").textContent = labels[mode];
+        document.getElementById("timerPlayBtn").textContent = "▶️";
+        document
+          .querySelectorAll("#page-pomodoro .tab")
+          .forEach((t) => t.classList.remove("active"));
+        if (btn) btn.classList.add("active");
+      }
+      function formatTime(s) {
+        return (
+          String(Math.floor(s / 60)).padStart(2, "0") +
+          ":" +
+          String(s % 60).padStart(2, "0")
+        );
+      }
+      function toggleTimer() {
+        if (timerRunning) {
+          clearInterval(timerInterval);
+          timerRunning = false;
+          document.getElementById("timerPlayBtn").textContent = "▶️";
+        } else {
+          timerRunning = true;
+          document.getElementById("timerPlayBtn").textContent = "⏸️";
+          timerInterval = setInterval(() => {
+            timerSeconds--;
+            document.getElementById("timerTime").textContent =
+              formatTime(timerSeconds);
+            if (timerSeconds <= 0) {
+              clearInterval(timerInterval);
+              timerRunning = false;
+              document.getElementById("timerPlayBtn").textContent = "▶️";
+              if (pomoMode === "work") {
+                pomoCount++;
+                pomoMins += 25;
+                pomoStreak++;
+                DB.setInt("pomodoros", pomoCount);
+                DB.setInt("pomomins", pomoMins);
+                DB.setInt("pomostreak", pomoStreak);
+                document.getElementById("pomo-completed").textContent =
+                  pomoCount;
+                document.getElementById("pomo-minutes").textContent = pomoMins;
+                document.getElementById("pomo-streak").textContent = pomoStreak;
+                showToast("Pomodoro completed! 🎉 Time for a break!");
+              } else {
+                showToast("Break is over! Let's get back to work! 💪");
+              }
+              setPomodoro(
+                "work",
+                document.querySelector("#page-pomodoro .tab"),
+              );
+            }
+          }, 1000);
+        }
+      }
+      function resetTimer() {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        document.getElementById("timerPlayBtn").textContent = "▶️";
+        setPomodoro(
+          pomoMode,
+          document.querySelector("#page-pomodoro .tab.active"),
+        );
+      }
+      function skipTimer() {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        document.getElementById("timerPlayBtn").textContent = "▶️";
+        timerSeconds = 0;
+        if (pomoMode === "work") {
+          pomoCount++;
+          pomoMins += 25;
+          DB.setInt("pomodoros", pomoCount);
+          DB.setInt("pomomins", pomoMins);
+          document.getElementById("pomo-completed").textContent = pomoCount;
+          document.getElementById("pomo-minutes").textContent = pomoMins;
+        }
+        setPomodoro(
+          pomoMode,
+          document.querySelector("#page-pomodoro .tab.active"),
+        );
+      }
+      // ============================================
+      // CALCULATOR
+      // ============================================
+      let calcExpr = "";
+      function calcInput(v) {
+        calcExpr += v;
+        document.getElementById("calcResult").textContent = calcExpr || "0";
+      }
+      function calcClear() {
+        calcExpr = "";
+        document.getElementById("calcResult").textContent = "0";
+        document.getElementById("calcExpr").textContent = "";
+      }
+      function calcBackspace() {
+        calcExpr = calcExpr.slice(0, -1);
+        document.getElementById("calcResult").textContent = calcExpr || "0";
+      }
+      function calcEquals() {
+        try {
+          if (!/^[\d+\-*/().%\s\w]+$/.test(calcExpr)) {
+            throw new Error("Invalid expression");
+          }
+          const r = Function('"use strict";return (' + calcExpr + ")")();
+          if (typeof r !== "number" || !isFinite(r)) {
+            throw new Error("Invalid result");
+          }
+          document.getElementById("calcExpr").textContent = calcExpr + " =";
+          document.getElementById("calcResult").textContent = parseFloat(
+            r.toFixed(10),
+          );
+          calcExpr = String(r);
+        } catch (e) {
+          document.getElementById("calcResult").textContent = "Error!";
+          calcExpr = "";
+        }
+      }
+      function setCalcMode(mode, btn) {
+        document
+          .querySelectorAll("#page-calculator .tab")
+          .forEach((t) => t.classList.remove("active"));
+        if (btn) btn.classList.add("active");
+        const grid = document.getElementById("calcGrid");
+        if (mode === "scientific") {
+          grid.innerHTML = `
+<button class="calc-btn clear" onclick="calcClear()">C</button><button class="calc-btn clear" onclick="calcBackspace()">⌫</button><button class="calc-btn operator" onclick="calcInput('Math.sin(')">sin</button><button class="calc-btn operator" onclick="calcInput('Math.cos(')">cos</button>
+<button class="calc-btn operator" onclick="calcInput('Math.tan(')">tan</button><button class="calc-btn operator" onclick="calcInput('Math.sqrt(')">√</button><button class="calc-btn operator" onclick="calcInput('**')">xⁿ</button><button class="calc-btn operator" onclick="calcInput('/')">÷</button>
+<button class="calc-btn" onclick="calcInput('7')">7</button><button class="calc-btn" onclick="calcInput('8')">8</button><button class="calc-btn" onclick="calcInput('9')">9</button><button class="calc-btn operator" onclick="calcInput('*')">×</button>
+<button class="calc-btn" onclick="calcInput('4')">4</button><button class="calc-btn" onclick="calcInput('5')">5</button><button class="calc-btn" onclick="calcInput('6')">6</button><button class="calc-btn operator" onclick="calcInput('-')">−</button>
+<button class="calc-btn" onclick="calcInput('1')">1</button><button class="calc-btn" onclick="calcInput('2')">2</button><button class="calc-btn" onclick="calcInput('3')">3</button><button class="calc-btn operator" onclick="calcInput('+')">+</button>
+<button class="calc-btn" onclick="calcInput('Math.PI')">π</button><button class="calc-btn" onclick="calcInput('0')">0</button><button class="calc-btn" onclick="calcInput('.')">.</button><button class="calc-btn equals" onclick="calcEquals()">=</button>
+`;
+        } else {
+          grid.innerHTML = `
+<button class="calc-btn clear" onclick="calcClear()">C</button><button class="calc-btn clear" onclick="calcBackspace()">⌫</button><button class="calc-btn operator" onclick="calcInput('%')">%</button><button class="calc-btn operator" onclick="calcInput('/')">÷</button>
+<button class="calc-btn" onclick="calcInput('7')">7</button><button class="calc-btn" onclick="calcInput('8')">8</button><button class="calc-btn" onclick="calcInput('9')">9</button><button class="calc-btn operator" onclick="calcInput('*')">×</button>
+<button class="calc-btn" onclick="calcInput('4')">4</button><button class="calc-btn" onclick="calcInput('5')">5</button><button class="calc-btn" onclick="calcInput('6')">6</button><button class="calc-btn operator" onclick="calcInput('-')">−</button>
+<button class="calc-btn" onclick="calcInput('1')">1</button><button class="calc-btn" onclick="calcInput('2')">2</button><button class="calc-btn" onclick="calcInput('3')">3</button><button class="calc-btn operator" onclick="calcInput('+')">+</button>
+<button class="calc-btn" style="grid-column:span 2;" onclick="calcInput('0')">0</button><button class="calc-btn" onclick="calcInput('.')">.</button><button class="calc-btn equals" onclick="calcEquals()">=</button>
+`;
+        }
+      }
+      document.addEventListener("keydown", (e) => {
+        if (
+          !document
+            .getElementById("page-calculator")
+            .classList.contains("active")
+        )
+          return;
+        if (e.key >= "0" && e.key <= "9") calcInput(e.key);
+        else if ("+-*/.=%".includes(e.key)) calcInput(e.key);
+        else if (e.key === "Enter") calcEquals();
+        else if (e.key === "Escape") calcClear();
+        else if (e.key === "Backspace") calcBackspace();
+      });
+      // ============================================
+      // PASSWORD GENERATOR
+      // ============================================
+      function updatePassLen() {
+        document.getElementById("passLenVal").textContent =
+          document.getElementById("passLen").value;
+      }
+      function generatePassword() {
+        const len = parseInt(document.getElementById("passLen").value);
+        let chars = "";
+        if (document.getElementById("passUpper").checked)
+          chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        if (document.getElementById("passLower").checked)
+          chars += "abcdefghijklmnopqrstuvwxyz";
+        if (document.getElementById("passNums").checked) chars += "0123456789";
+        if (document.getElementById("passSyms").checked)
+          chars += "!@#$%^&*()_+-=[]{}|;:,.<>?";
+        if (!chars) return showToast("Select at least one option!", "error");
+        let pass = "";
+        for (let i = 0; i < len; i++)
+          pass += chars[Math.floor(Math.random() * chars.length)];
+        document.getElementById("passText").textContent = pass;
+        updatePassStrength(pass);
+      }
+      function updatePassStrength(p) {
+        let s = 0;
+        if (p.length >= 8) s++;
+        if (p.length >= 12) s++;
+        if (p.length >= 16) s++;
+        if (/[a-z]/.test(p) && /[A-Z]/.test(p)) s++;
+        if (/\d/.test(p)) s++;
+        if (/[^a-zA-Z0-9]/.test(p)) s++;
+        const pct = (s / 6) * 100;
+        const bar = document.getElementById("passStrengthBar");
+        bar.style.width = pct + "%";
+        const text = document.getElementById("passStrengthText");
+        if (pct < 40) {
+          bar.style.background = "#e17055";
+          text.textContent = "⚠️ Weak";
+          text.style.color = "#e17055";
+        } else if (pct < 70) {
+          bar.style.background = "#fdcb6e";
+          text.textContent = "🔶 Medium";
+          text.style.color = "#fdcb6e";
+        } else {
+          bar.style.background = "#00b894";
+          text.textContent = "🔒 Strong";
+          text.style.color = "#00b894";
+        }
+      }
+      function copyPassword() {
+        const p = document.getElementById("passText").textContent;
+        if (p === "Generate a password")
+          return showToast("Generate a password first!", "error");
+        navigator.clipboard
+          .writeText(p)
+          .then(() => showToast("Password copied! 📋"))
+          .catch(() => showToast("Failed to copy", "error"));
+      }
+      // ============================================
+      // UNIT CONVERTER
+      // ============================================
+      const convData = {
+        length: {
+          u: ["mm", "cm", "m", "km", "in", "ft", "yd", "mi"],
+          l: {
+            mm: "Millimeter",
+            cm: "Centimeter",
+            m: "Meter",
+            km: "Kilometer",
+            in: "Inch",
+            ft: "Foot",
+            yd: "Yard",
+            mi: "Mile",
+          },
+          b: {
+            mm: 0.001,
+            cm: 0.01,
+            m: 1,
+            km: 1000,
+            in: 0.0254,
+            ft: 0.3048,
+            yd: 0.9144,
+            mi: 1609.344,
+          },
+        },
+        weight: {
+          u: ["mg", "g", "kg", "t", "oz", "lb"],
+          l: {
+            mg: "Milligram",
+            g: "Gram",
+            kg: "Kilogram",
+            t: "Tonne",
+            oz: "Ounce",
+            lb: "Pound",
+          },
+          b: {
+            mg: 0.000001,
+            g: 0.001,
+            kg: 1,
+            t: 1000,
+            oz: 0.0283495,
+            lb: 0.453592,
+          },
+        },
+        temp: {
+          u: ["°C", "°F", "K"],
+          l: { "°C": "Celsius", "°F": "Fahrenheit", K: "Kelvin" },
+        },
+        data: {
+          u: ["B", "KB", "MB", "GB", "TB"],
+          l: {
+            B: "Byte",
+            KB: "Kilobyte",
+            MB: "Megabyte",
+            GB: "Gigabyte",
+            TB: "Terabyte",
+          },
+          b: { B: 1, KB: 1024, MB: 1048576, GB: 1073741824, TB: 1099511627776 },
+        },
+        time: {
+          u: ["ms", "s", "min", "hr", "day", "wk", "mo", "yr"],
+          l: {
+            ms: "Millisecond",
+            s: "Second",
+            min: "Minute",
+            hr: "Hour",
+            day: "Day",
+            wk: "Week",
+            mo: "Month",
+            yr: "Year",
+          },
+          b: {
+            ms: 0.001,
+            s: 1,
+            min: 60,
+            hr: 3600,
+            day: 86400,
+            wk: 604800,
+            mo: 2592000,
+            yr: 31536000,
+          },
+        },
+        speed: {
+          u: ["m/s", "km/h", "mph", "kn"],
+          l: {
+            "m/s": "Meters/sec",
+            "km/h": "Km/hour",
+            mph: "Miles/hour",
+            kn: "Knots",
+          },
+          b: { "m/s": 1, "km/h": 0.277778, mph: 0.44704, kn: 0.514444 },
+        },
+        area: {
+          u: ["mm²", "cm²", "m²", "km²", "ha", "acre"],
+          l: {
+            "mm²": "Sq Millimeter",
+            "cm²": "Sq Centimeter",
+            "m²": "Sq Meter",
+            "km²": "Sq Kilometer",
+            ha: "Hectare",
+            acre: "Acre",
+          },
+          b: {
+            "mm²": 0.000001,
+            "cm²": 0.0001,
+            "m²": 1,
+            "km²": 1000000,
+            ha: 10000,
+            acre: 4046.86,
+          },
+        },
+        volume: {
+          u: ["ml", "L", "m³", "gal", "cup", "floz"],
+          l: {
+            ml: "Milliliter",
+            L: "Liter",
+            "m³": "Cubic Meter",
+            gal: "Gallon",
+            cup: "Cup",
+            floz: "Fluid Oz",
+          },
+          b: {
+            ml: 0.001,
+            L: 1,
+            "m³": 1000,
+            gal: 3.78541,
+            cup: 0.236588,
+            floz: 0.0295735,
+          },
+        },
+      };
+      let convType = "length";
+      function setConvType(type, btn) {
+        convType = type;
+        document
+          .querySelectorAll("#page-converter .tab")
+          .forEach((t) => t.classList.remove("active"));
+        if (btn) btn.classList.add("active");
+        const d = convData[type];
+        document.getElementById("convFrom").innerHTML = d.u
+          .map((u) => `<option value="${u}">${d.l[u]} (${u})</option>`)
+          .join("");
+        document.getElementById("convTo").innerHTML = d.u
+          .map((u) => `<option value="${u}">${d.l[u]} (${u})</option>`)
+          .join("");
+        if (d.u.length > 1) document.getElementById("convTo").selectedIndex = 1;
+        convertUnit();
+      }
+      function convertUnit() {
+        const v = parseFloat(document.getElementById("convInput").value) || 0;
+        const from = document.getElementById("convFrom").value;
+        const to = document.getElementById("convTo").value;
+        let r;
+        if (convType === "temp") {
+          let c =
+            from === "°C" ? v : from === "°F" ? ((v - 32) * 5) / 9 : v - 273.15;
+          r = to === "°C" ? c : to === "°F" ? (c * 9) / 5 + 32 : c + 273.15;
+        } else {
+          r = (v * convData[convType].b[from]) / convData[convType].b[to];
+        }
+        document.getElementById("convOutput").value = parseFloat(
+          r.toPrecision(10),
+        );
+        document.getElementById("convResult").textContent = parseFloat(
+          r.toPrecision(10),
+        );
+        document.getElementById("convResultLabel").textContent =
+          `${v} ${from} = ${parseFloat(r.toPrecision(10))} ${to}`;
+      }
+      function swapUnits() {
+        const f = document.getElementById("convFrom"),
+          t = document.getElementById("convTo");
+        const tmp = f.value;
+        f.value = t.value;
+        t.value = tmp;
+        convertUnit();
+      }
+      // ============================================
+      // HABITS
+      // ============================================
+      function addHabit() {
+        const name = document.getElementById("habitName").value.trim();
+        if (!name) return showToast("Enter a habit name!", "error");
+        habits.push({
+          id: Date.now(),
+          name,
+          emoji: document.getElementById("habitEmoji").value,
+          days: {},
+          created: new Date().toISOString(),
+        });
+        document.getElementById("habitName").value = "";
+        saveData();
+        renderHabits();
+        showToast("Habit added! 🎯");
+      }
+      function toggleHabitDay(id, date) {
+        const h = habits.find((h) => h.id === id);
+        if (h) {
+          h.days[date] = h.days[date] ? null : true;
+          saveData();
+          renderHabits();
+        }
+      }
+      function deleteHabit(id) {
+        habits = habits.filter((h) => h.id !== id);
+        saveData();
+        renderHabits();
+      }
+      function getStreak(h) {
+        let s = 0,
+          d = new Date();
+        while (true) {
+          const ds = d.toISOString().split("T")[0];
+          if (h.days[ds]) {
+            s++;
+            d.setDate(d.getDate() - 1);
+          } else break;
+        }
+        return s;
+      }
+      function renderHabits() {
+        const c = document.getElementById("habits-list");
+        if (habits.length === 0) {
+          c.innerHTML =
+            '<div class="empty-state"><div class="icon">🎯</div><h4>No habits yet</h4><p>Add your first habit above!</p></div>';
+          return;
+        }
+        const today = new Date();
+        const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+        const week = [];
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date(today);
+          d.setDate(d.getDate() - i);
+          week.push(d);
+        }
+        c.innerHTML = habits
+          .map(
+            (h) => `
+<div class="habit-item">
+<div class="habit-icon">${h.emoji}</div>
+<div class="habit-info"><h4>${escHtml(h.name)}</h4><div class="habit-streak">🔥 ${getStreak(h)} day streak</div></div>
+<div class="habit-days">
+${week
+  .map((d) => {
+    const ds = d.toISOString().split("T")[0];
+    const dn = days[d.getDay()];
+    const done = h.days[ds];
+    return `<div class="habit-day ${done ? "completed" : ""}" onclick="toggleHabitDay(${h.id},'${ds}')">${dn}</div>`;
+  })
+  .join("")}
+</div>
+<button class="todo-delete" onclick="deleteHabit(${h.id})">✕</button>
+</div>
+`,
+          )
+          .join("");
+      }
+      // ============================================
+      // CALENDAR
+      // ============================================
+      let calDate = new Date();
+      let selectedCalDate = null;
+      function renderCalendar() {
+        const y = calDate.getFullYear(),
+          m = calDate.getMonth();
+        const months = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        document.getElementById("calMonthYear").textContent =
+          `${months[m]} ${y}`;
+        const first = new Date(y, m, 1).getDay();
+        const days = new Date(y, m + 1, 0).getDate();
+        const today = new Date();
+        let html = "";
+        for (let i = 0; i < first; i++)
+          html += '<div class="cal-day other-month"></div>';
+        for (let d = 1; d <= days; d++) {
+          const ds = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+          const isToday =
+            d === today.getDate() &&
+            m === today.getMonth() &&
+            y === today.getFullYear();
+          const hasEvent = events[ds] && events[ds].length > 0;
+          html += `<div class="cal-day ${isToday ? "today" : ""} ${hasEvent ? "has-event" : ""}" onclick="selectCalDate('${ds}')">${d}</div>`;
+        }
+        document.getElementById("calDays").innerHTML = html;
+      }
+      function changeMonth(dir) {
+        calDate.setMonth(calDate.getMonth() + dir);
+        renderCalendar();
+      }
+      function selectCalDate(ds) {
+        selectedCalDate = ds;
+        document.getElementById("events-section").style.display = "block";
+        const [year, month, day] = ds.split("-");
+        const date = new Date(year, month - 1, day);
+        document.getElementById("eventsDate").textContent =
+          date.toLocaleDateString();
+        document.getElementById("eventInput").value = "";
+        renderEvents();
+      }
+      function addEvent() {
+        const input = document.getElementById("eventInput");
+        const text = input.value.trim();
+        if (!text || !selectedCalDate)
+          return showToast("Enter event and select a date!", "error");
+        if (!events[selectedCalDate]) events[selectedCalDate] = [];
+        events[selectedCalDate].push({ id: Date.now(), text });
+        input.value = "";
+        saveData();
+        renderCalendar();
+        renderEvents();
+        showToast("Event added! 📅");
+      }
+      function deleteEvent(ds, id) {
+        if (events[ds]) events[ds] = events[ds].filter((e) => e.id !== id);
+        saveData();
+        renderCalendar();
+        renderEvents();
+      }
+      function renderEvents() {
+        const c = document.getElementById("events-list");
+        if (
+          !selectedCalDate ||
+          !events[selectedCalDate] ||
+          events[selectedCalDate].length === 0
+        ) {
+          c.innerHTML =
+            '<p style="color:var(--text-muted);text-align:center;">No events for this date</p>';
+        } else {
+          c.innerHTML = events[selectedCalDate]
+            .map(
+              (e) => `
+<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid var(--border);">
+<span>📌 ${escHtml(e.text)}</span>
+<button class="todo-delete" onclick="deleteEvent('${selectedCalDate}',${e.id})">✕</button>
+</div>
+`,
+            )
+            .join("");
+        }
+      }
+      // ============================================
+      // BREATHING EXERCISE
+      // ============================================
+      let breathInterval = null;
+      let breathRunning = false;
+      let breathPattern = "4-7-8";
+      function setBreathing(pattern, btn) {
+        breathPattern = pattern;
+        document
+          .querySelectorAll("#page-breathing .tab")
+          .forEach((t) => t.classList.remove("active"));
+        if (btn) btn.classList.add("active");
+        resetBreathing();
+      }
+      function toggleBreathing() {
+        if (breathRunning) {
+          resetBreathing();
+          return;
+        }
+        breathRunning = true;
+        document.getElementById("breathBtn").textContent = "⏸️ Stop";
+        const patterns = {
+          "4-7-8": [
+            { phase: "Breathe In", duration: 4 },
+            { phase: "Hold", duration: 7 },
+            { phase: "Breathe Out", duration: 8 },
+          ],
+          box: [
+            { phase: "Breathe In", duration: 4 },
+            { phase: "Hold", duration: 4 },
+            { phase: "Breathe Out", duration: 4 },
+            { phase: "Hold", duration: 4 },
+          ],
+          calm: [
+            { phase: "Breathe In", duration: 4 },
+            { phase: "Hold", duration: 4 },
+            { phase: "Breathe Out", duration: 6 },
+          ],
+        };
+        const p = patterns[breathPattern];
+        let idx = 0;
+        const circle = document.getElementById("breathCircle");
+        circle.classList.add("breathing");
+        function runPhase() {
+          if (!breathRunning) return;
+          const ph = p[idx % p.length];
+          document.getElementById("breathText").textContent = ph.phase;
+          document.getElementById("breathPhase").textContent =
+            `${ph.phase} — ${ph.duration}s`;
+          let sec = ph.duration;
+          clearInterval(breathInterval);
+          breathInterval = setInterval(() => {
+            sec--;
+            document.getElementById("breathPhase").textContent =
+              `${ph.phase} — ${sec}s`;
+            if (sec <= 0) {
+              idx++;
+              clearInterval(breathInterval);
+              runPhase();
+            }
+          }, 1000);
+        }
+        runPhase();
+      }
+      function resetBreathing() {
+        breathRunning = false;
+        clearInterval(breathInterval);
+        document.getElementById("breathBtn").textContent = "▶️ Start";
+        document.getElementById("breathText").textContent = "Tap to Start";
+        document.getElementById("breathPhase").textContent =
+          "Press start to begin";
+        document.getElementById("breathCircle").classList.remove("breathing");
+      }
+      // ============================================
+      // BMI CALCULATOR
+      // ============================================
+      function calculateBMI() {
+        const h = parseFloat(document.getElementById("bmiHeight").value) / 100;
+        const w = parseFloat(document.getElementById("bmiWeight").value);
+        if (!h || !w) return showToast("Enter height and weight!", "error");
+        const bmi = w / (h * h);
+        let cat = "",
+          color = "";
+        if (bmi < 18.5) {
+          cat = "Underweight";
+          color = "#fdcb6e";
+        } else if (bmi < 25) {
+          cat = "Normal Weight";
+          color = "#00b894";
+        } else if (bmi < 30) {
+          cat = "Overweight";
+          color = "#fdcb6e";
+        } else {
+          cat = "Obese";
+          color = "#e17055";
+        }
+        document.getElementById("bmiResult").innerHTML = `
+<div class="bmi-result">
+<div class="bmi-value">${bmi.toFixed(1)}</div>
+<div class="bmi-category" style="color:${color};">${cat}</div>
+</div>
+`;
+      }
+      // ============================================
+      // WATER TRACKER
+      // ============================================
+      function initWater() {
+        const today = new Date().toDateString();
+        if (waterDate !== today) {
+          waterData = 0;
+          waterDate = today;
+          DB.setInt("water", 0);
+          DB.set("waterDate", today);
+        }
+        renderWater();
+      }
+      function renderWater() {
+        const today = new Date().toDateString();
+        if (waterDate !== today) {
+          waterData = 0;
+          waterDate = today;
+          DB.setInt("water", 0);
+          DB.set("waterDate", today);
+        }
+        const c = document.getElementById("waterGlasses");
+        c.innerHTML = "";
+        for (let i = 0; i < 8; i++) {
+          c.innerHTML += `<div class="water-glass ${i < waterData ? "filled" : ""}" onclick="setWater(${i})">${i < waterData ? "💧" : "⬜"}</div>`;
+        }
+        document.getElementById("waterCount").textContent = waterData;
+        document.getElementById("waterMl").textContent =
+          waterData * 250 + " ml";
+        document.getElementById("waterProgress").style.width =
+          (waterData / 8) * 100 + "%";
+      }
+      function setWater(i) {
+        waterData = i < waterData ? i : i + 1;
+        DB.setInt("water", waterData);
+        renderWater();
+        if (waterData === 8) showToast("Water goal achieved! 💧🎉");
+      }
+      // ============================================
+      // MOOD TRACKER
+      // ============================================
+      function selectMood(event, mood) {
+        selectedMood = mood;
+        document
+          .querySelectorAll(".mood-btn")
+          .forEach((b) => b.classList.remove("selected"));
+        event.currentTarget.classList.add("selected");
+        const emojis = {
+          amazing: "🤩",
+          happy: "😊",
+          okay: "😐",
+          sad: "😢",
+          angry: "😡",
+        };
+        document.getElementById("moodSelected").textContent =
+          `You feel: ${emojis[mood]}`;
+      }
+      function saveMood() {
+        if (!selectedMood) return showToast("Select a mood first!", "error");
+        moods.unshift({
+          id: Date.now(),
+          mood: selectedMood,
+          note: document.getElementById("moodNote").value.trim(),
+          date: new Date().toISOString(),
+        });
+        document.getElementById("moodNote").value = "";
+        selectedMood = "";
+        document
+          .querySelectorAll(".mood-btn")
+          .forEach((b) => b.classList.remove("selected"));
+        document.getElementById("moodSelected").textContent = "";
+        saveData();
+        renderMoods();
+        showToast("Mood saved! 😊");
+      }
+      function renderMoods() {
+        const c = document.getElementById("moodHistory");
+        if (moods.length === 0) return;
+        const emojis = {
+          amazing: "🤩",
+          happy: "😊",
+          okay: "😐",
+          sad: "😢",
+          angry: "😡",
+        };
+        c.innerHTML =
+          '<div class="section-title" style="margin-top:15px;">📊 Mood History</div>' +
+          moods
+            .slice(0, 10)
+            .map(
+              (m) => `
+<div class="diary-entry">
+<div class="entry-date">${emojis[m.mood]} ${new Date(m.date).toLocaleDateString()}</div>
+${m.note ? `<div class="entry-text">${escHtml(m.note)}</div>` : ""}
+</div>
+`,
+            )
+            .join("");
+      }
+      // ============================================
+      // DIARY
+      // ============================================
+      function initDiary() {
+        document.getElementById("diaryDate").value = new Date()
+          .toISOString()
+          .split("T")[0];
+      }
+      function saveDiary() {
+        const date = document.getElementById("diaryDate").value;
+        const content = document.getElementById("diaryContent").value.trim();
+        if (!content) return showToast("Write something!", "error");
+        diaries.unshift({
+          id: Date.now(),
+          date,
+          content,
+          mood: document.getElementById("diaryMood").value,
+          created: new Date().toISOString(),
+        });
+        document.getElementById("diaryContent").value = "";
+        saveData();
+        renderDiaries();
+        showToast("Diary entry saved! 📖");
+      }
+      function renderDiaries() {
+        const c = document.getElementById("diary-entries");
+        if (diaries.length === 0) return;
+        c.innerHTML =
+          '<div class="section-title" style="margin-top:15px;">📜 Past Entries</div>' +
+          diaries
+            .map(
+              (d) => `
+<div class="diary-entry">
+<div class="entry-date">${d.mood} ${new Date(d.date + "T12:00:00").toLocaleDateString()} <button class="todo-delete" style="margin-left:auto;" onclick="diaries=diaries.filter(x=>x.id!==${d.id});saveData();renderDiaries();">✕</button></div>
+<div class="entry-text">${escHtml(d.content)}</div>
+</div>
+`,
+            )
+            .join("");
+      }
+      // ============================================
+      // TEXT TOOLS
+      // ============================================
+      function analyzeText() {
+        const t = document.getElementById("textInput").value;
+        document.getElementById("textChars").textContent = t.length;
+        document.getElementById("textWords").textContent = t.trim()
+          ? t.trim().split(/\s+/).length
+          : 0;
+        document.getElementById("textSentences").textContent = t.trim()
+          ? (t.match(/[.!?]+/g) || []).length || (t.trim() ? 1 : 0)
+          : 0;
+      }
+      function textToUpperCase() {
+        document.getElementById("textInput").value = document
+          .getElementById("textInput")
+          .value.toUpperCase();
+      }
+      function textToLowerCase() {
+        document.getElementById("textInput").value = document
+          .getElementById("textInput")
+          .value.toLowerCase();
+      }
+      function textToTitleCase() {
+        document.getElementById("textInput").value = document
+          .getElementById("textInput")
+          .value.replace(
+            /\w\S*/g,
+            (t) => t.charAt(0).toUpperCase() + t.substr(1).toLowerCase(),
+          );
+      }
+      function textReverse() {
+        document.getElementById("textInput").value = document
+          .getElementById("textInput")
+          .value.split("")
+          .reverse()
+          .join("");
+      }
+      function textCopy() {
+        navigator.clipboard.writeText(
+          document.getElementById("textInput").value,
+        );
+        showToast("Copied! 📋");
+      }
+      function textClear() {
+        document.getElementById("textInput").value = "";
+        analyzeText();
+      }
+      function textRemoveExtraSpaces() {
+        document.getElementById("textInput").value = document
+          .getElementById("textInput")
+          .value.replace(/\s+/g, " ")
+          .trim();
+      }
+      function textCountLines() {
+        const lines = document
+          .getElementById("textInput")
+          .value.split("\n").length;
+        showToast("Lines: " + lines, "info");
+      }
+      // ============================================
+      // COLOR PALETTE
+      // ============================================
+      function generatePalette() {
+        const c = document.getElementById("paletteColors");
+        const colors = [];
+        for (let i = 0; i < 5; i++)
+          colors.push(
+            "#" +
+              Math.floor(Math.random() * 16777215)
+                .toString(16)
+                .padStart(6, "0"),
+          );
+        c.innerHTML = colors
+          .map(
+            (col) =>
+              `<div class="palette-color" style="background:${col};" onclick="navigator.clipboard.writeText('${col}');showToast('Copied: ${col}');"><span>${col}</span></div>`,
+          )
+          .join("");
+      }
+      function copyPalette() {
+        const colors = document.querySelectorAll(".palette-color span");
+        const text = Array.from(colors)
+          .map((s) => s.textContent)
+          .join(", ");
+        navigator.clipboard.writeText(text);
+        showToast("Palette copied! 🎨");
+      }
+      // ============================================
+      // DECISION MAKER
+      // ============================================
+      let decisionOptions = [];
+      function addDecisionOption() {
+        const input = document.getElementById("decisionInput");
+        const val = input.value.trim();
+        if (!val) return showToast("Enter an option!", "error");
+        decisionOptions.push(val);
+        input.value = "";
+        renderDecisionOptions();
+      }
+      function removeDecisionOption(i) {
+        decisionOptions.splice(i, 1);
+        renderDecisionOptions();
+      }
+      function renderDecisionOptions() {
+        const c = document.getElementById("decisionOptions");
+        if (decisionOptions.length === 0) {
+          c.innerHTML =
+            '<p style="color:var(--text-muted);">Add options above</p>';
+        } else {
+          c.innerHTML = decisionOptions
+            .map(
+              (o, i) =>
+                `<div class="decision-chip">${escHtml(o)} <span class="remove" onclick="removeDecisionOption(${i})">✕</span></div>`,
+            )
+            .join("");
+        }
+      }
+      function makeDecision() {
+        if (decisionOptions.length < 2)
+          return showToast("Add at least 2 options!", "error");
+        const winner =
+          decisionOptions[Math.floor(Math.random() * decisionOptions.length)];
+        document.getElementById("decisionResult").innerHTML =
+          `<div class="decision-result"><h3>🎉 ${escHtml(winner)}</h3><p>The decision has been made!</p></div>`;
+      }
+      // ============================================
+      // STOPWATCH
+      // ============================================
+      let swInterval = null;
+      let swRunning = false;
+      let swTime = 0;
+      let swLaps = [];
+      function toggleStopwatch() {
+        if (swRunning) {
+          clearInterval(swInterval);
+          swRunning = false;
+          document.getElementById("swStartBtn").textContent = "▶️ Resume";
+        } else {
+          swRunning = true;
+          document.getElementById("swStartBtn").textContent = "⏸️ Pause";
+          swInterval = setInterval(() => {
+            swTime += 10;
+            const ms = Math.floor((swTime % 1000) / 10);
+            const s = Math.floor(swTime / 1000) % 60;
+            const m = Math.floor(swTime / 60000) % 60;
+            const h = Math.floor(swTime / 3600000);
+            document.getElementById("swTime").innerHTML =
+              `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}<span class="stopwatch-ms">.${String(ms).padStart(2, "0")}</span>`;
+          }, 10);
+        }
+      }
+      function resetStopwatch() {
+        clearInterval(swInterval);
+        swRunning = false;
+        swTime = 0;
+        swLaps = [];
+        document.getElementById("swTime").innerHTML =
+          '00:00:00<span class="stopwatch-ms">.00</span>';
+        document.getElementById("swStartBtn").textContent = "▶️ Start";
+        document.getElementById("laps").innerHTML = "";
+      }
+      function addLap() {
+        if (!swRunning) return;
+        swLaps.push(swTime);
+        const ms = Math.floor((swTime % 1000) / 10);
+        const s = Math.floor(swTime / 1000) % 60;
+        const m = Math.floor(swTime / 60000) % 60;
+        const h = Math.floor(swTime / 3600000);
+        const time = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}.${String(ms).padStart(2, "0")}`;
+        document.getElementById("laps").innerHTML =
+          `<div class="lap-item"><span>Lap ${swLaps.length}</span><span>${time}</span></div>` +
+          document.getElementById("laps").innerHTML;
+      }
+      // ============================================
+      // COUNTDOWN TIMER
+      // ============================================
+      let cdInterval = null;
+      let cdRunning = false;
+      let cdTotal = 0;
+      let cdRemaining = 0;
+      function toggleCountdown() {
+        if (cdRunning) {
+          clearInterval(cdInterval);
+          cdRunning = false;
+          document.getElementById("cdStartBtn").textContent = "▶️ Resume";
+        } else {
+          if (cdRemaining <= 0) {
+            const h = parseInt(document.getElementById("cdHours").value) || 0;
+            const m = parseInt(document.getElementById("cdMinutes").value) || 0;
+            const s = parseInt(document.getElementById("cdSeconds").value) || 0;
+            cdTotal = h * 3600 + m * 60 + s;
+            cdRemaining = cdTotal;
+            if (cdTotal <= 0) return showToast("Set a time first!", "error");
+          }
+          cdRunning = true;
+          document.getElementById("cdStartBtn").textContent = "⏸️ Pause";
+          cdInterval = setInterval(() => {
+            cdRemaining--;
+            updateCountdownDisplay();
+            if (cdRemaining <= 0) {
+              clearInterval(cdInterval);
+              cdRunning = false;
+              document.getElementById("cdStartBtn").textContent = "▶️ Start";
+              showToast("Countdown finished! ⏰");
+              try {
+                const audioContext = new (
+                  window.AudioContext || window.webkitAudioContext
+                )();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.frequency.value = 800;
+                oscillator.type = "sine";
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(
+                  0.01,
+                  audioContext.currentTime + 0.5,
+                );
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+              } catch (e) {}
+            }
+          }, 1000);
+        }
+      }
+      function updateCountdownDisplay() {
+        const h = Math.floor(cdRemaining / 3600);
+        const m = Math.floor((cdRemaining % 3600) / 60);
+        const s = cdRemaining % 60;
+        document.getElementById("cdH").textContent = String(h).padStart(2, "0");
+        document.getElementById("cdM").textContent = String(m).padStart(2, "0");
+        document.getElementById("cdS").textContent = String(s).padStart(2, "0");
+      }
+      function resetCountdown() {
+        clearInterval(cdInterval);
+        cdRunning = false;
+        cdRemaining = 0;
+        document.getElementById("cdStartBtn").textContent = "▶️ Start";
+        updateCountdownDisplay();
+      }
+      // ============================================
+      // AGE CALCULATOR
+      // ============================================
+      function calculateAge() {
+        const dob = new Date(document.getElementById("ageDob").value);
+        if (isNaN(dob)) return showToast("Select your date of birth!", "error");
+        const now = new Date();
+        let y = now.getFullYear() - dob.getFullYear();
+        let m = now.getMonth() - dob.getMonth();
+        let d = now.getDate() - dob.getDate();
+        if (d < 0) {
+          m--;
+          d += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+        }
+        if (m < 0) {
+          y--;
+          m += 12;
+        }
+        const totalMonths = y * 12 + m;
+        const totalWeeks = Math.floor((now - dob) / 604800000);
+        const totalDays = Math.floor((now - dob) / 86400000);
+        const totalHours = totalDays * 24;
+        document.getElementById("ageResult").innerHTML = `
+<div class="age-result">
+<div class="age-unit"><div class="number">${y}</div><div class="label">Years</div></div>
+<div class="age-unit"><div class="number">${m}</div><div class="label">Months</div></div>
+<div class="age-unit"><div class="number">${d}</div><div class="label">Days</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;">
+<div style="background:var(--darker);padding:10px;border-radius:8px;text-align:center;"><div style="font-weight:700;color:var(--primary);">${totalMonths}</div><div style="font-size:11px;color:var(--text-muted);">Total Months</div></div>
+<div style="background:var(--darker);padding:10px;border-radius:8px;text-align:center;"><div style="font-weight:700;color:var(--primary);">${totalWeeks.toLocaleString()}</div><div style="font-size:11px;color:var(--text-muted);">Total Weeks</div></div>
+<div style="background:var(--darker);padding:10px;border-radius:8px;text-align:center;"><div style="font-weight:700;color:var(--primary);">${totalDays.toLocaleString()}</div><div style="font-size:11px;color:var(--text-muted);">Total Days</div></div>
+<div style="background:var(--darker);padding:10px;border-radius:8px;text-align:center;"><div style="font-weight:700;color:var(--primary);">${totalHours.toLocaleString()}</div><div style="font-size:11px;color:var(--text-muted);">Total Hours</div></div>
+</div>
+`;
+      }
+      // ============================================
+      // TIP CALCULATOR
+      // ============================================
+      function calculateTip() {
+        const bill = parseFloat(document.getElementById("tipBill").value) || 0;
+        const pct = parseInt(document.getElementById("tipPercent").value) || 0;
+        const split = parseInt(document.getElementById("tipSplit").value) || 1;
+        const tip = (bill * pct) / 100;
+        const total = bill + tip;
+        const perPerson = total / split;
+        document.getElementById("tipResult").innerHTML = `
+<div class="tip-result">
+<div class="tip-box"><div class="value">$${tip.toFixed(2)}</div><div class="label">Tip Amount</div></div>
+<div class="tip-box"><div class="value">$${total.toFixed(2)}</div><div class="label">Total Bill</div></div>
+<div class="tip-box"><div class="value">$${perPerson.toFixed(2)}</div><div class="label">Per Person</div></div>
+</div>
+`;
+      }
+      // ============================================
+      // AFFIRMATIONS
+      // ============================================
+      const affirmations = [
+        "I am capable of achieving anything I set my mind to.",
+        "Every day, I am becoming a better version of myself.",
+        "I deserve all the good things that come into my life.",
+        "I am grateful for the opportunities that surround me.",
+        "I radiate confidence, self-respect, and inner harmony.",
+        "My potential to succeed is limitless.",
+        "I choose to be happy and enjoy this moment.",
+        "I am worthy of love, respect, and success.",
+        "Challenges are opportunities for growth.",
+        "I am in charge of how I feel and today I choose happiness.",
+        "I trust my intuition and make wise decisions.",
+        "I am strong, resilient, and can overcome any obstacle.",
+        "My life is filled with abundance and prosperity.",
+        "I am at peace with my past and excited about my future.",
+        "I attract positive energy and good fortune.",
+        "I am enough, just as I am.",
+        "I choose to focus on what I can control and let go of what I can't.",
+        "My body is healthy, my mind is brilliant, and my soul is tranquil.",
+      ];
+      function newAffirmation() {
+        const a = affirmations[Math.floor(Math.random() * affirmations.length)];
+        document.getElementById("affirmationText").textContent = a;
+      }
+      function renderAffirmations() {
+        document.getElementById("affirmationsList").innerHTML = affirmations
+          .map(
+            (a, i) => `
+<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px;margin-bottom:8px;font-size:14px;cursor:pointer;" onclick="document.getElementById('affirmationText').textContent=affirmations[${i}];">
+✨ ${a}
+</div>
+`,
+          )
+          .join("");
+      }
+      // ============================================
+      // GOALS
+      // ============================================
+      function addGoal() {
+        const name = document.getElementById("goalName").value.trim();
+        const target = parseInt(document.getElementById("goalTarget").value);
+        const current =
+          parseInt(document.getElementById("goalCurrent").value) || 0;
+        if (!name || !target)
+          return showToast("Enter goal name and target!", "error");
+        goals.push({
+          id: Date.now(),
+          name,
+          target,
+          current,
+          created: new Date().toISOString(),
+        });
+        document.getElementById("goalName").value = "";
+        document.getElementById("goalTarget").value = "";
+        document.getElementById("goalCurrent").value = "";
+        saveData();
+        renderGoals();
+        showToast("Goal added! 🎯");
+      }
+      function updateGoalProgress(id, val) {
+        const g = goals.find((g) => g.id === id);
+        if (g) {
+          g.current = parseInt(val);
+          if (g.current > g.target) g.current = g.target;
+          saveData();
+          renderGoals();
+        }
+      }
+      function deleteGoal(id) {
+        goals = goals.filter((g) => g.id !== id);
+        saveData();
+        renderGoals();
+      }
+      function renderGoals() {
+        const c = document.getElementById("goals-list");
+        if (goals.length === 0) {
+          c.innerHTML =
+            '<div class="empty-state"><div class="icon">🎯</div><h4>No goals yet</h4><p>Set your first goal!</p></div>';
+        } else {
+          c.innerHTML = goals
+            .map((g) => {
+              const pct = Math.min((g.current / g.target) * 100, 100);
+              return `
+<div class="goal-item">
+<div class="goal-header"><h4>${escHtml(g.name)}</h4><button class="goal-delete" onclick="deleteGoal(${g.id})">✕</button></div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+<input type="number" class="input" value="${g.current}" min="0" max="${g.target}" style="max-width:100px;" onchange="updateGoalProgress(${g.id}, this.value)">
+<span style="color:var(--text-muted);font-size:13px;">/ ${g.target}</span>
+</div>
+<div class="goal-progress">
+<div class="progress-bar"><div class="progress-fill" style="width:${pct}%;"></div></div>
+<div class="percent">${Math.round(pct)}%</div>
+</div>
+</div>
+`;
+            })
+            .join("");
+        }
+      }
+      // ============================================
+      // SETTINGS
+      // ============================================
+      function exportData() {
+        const data = {
+          todos,
+          transactions,
+          notes,
+          habits,
+          events,
+          moods,
+          diaries,
+          goals,
+          pomodoros: pomoCount,
+          pomomins: pomoMins,
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], {
+          type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download =
+          "omnilife_backup_" + new Date().toISOString().split("T")[0] + ".json";
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast("Data exported! 📥");
+      }
+      function importData(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          try {
+            const data = JSON.parse(ev.target.result);
+            if (data.todos) todos = data.todos;
+            if (data.transactions) transactions = data.transactions;
+            if (data.notes) notes = data.notes;
+            if (data.habits) habits = data.habits;
+            if (data.events) events = data.events;
+            if (data.moods) moods = data.moods;
+            if (data.diaries) diaries = data.diaries;
+            if (data.goals) goals = data.goals;
+            saveData();
+            renderAll();
+            showToast("Data imported successfully! 📂");
+          } catch (e) {
+            showToast("Invalid file!", "error");
+          }
+        };
+        reader.readAsText(file);
+      }
+      function clearAllData() {
+        if (
+          confirm("Are you sure? This will delete ALL your data permanently!")
+        ) {
+          localStorage.clear();
+          todos = [];
+          transactions = [];
+          notes = [];
+          habits = [];
+          events = {};
+          moods = [];
+          diaries = [];
+          goals = [];
+          waterData = 0;
+          pomoCount = 0;
+          pomoMins = 0;
+          pomoStreak = 0;
+          currentStreak = 0;
+          saveData();
+          renderAll();
+          showToast("All data cleared! 🗑️", "warning");
+        }
+      }
+      // ============================================
+      // UTILITY
+      // ============================================
+      function escHtml(t) {
+        const d = document.createElement("div");
+        d.textContent = t;
+        return d.innerHTML;
+      }
+      // ============================================
+      // RENDER ALL
+      // ============================================
+      function renderAll() {
+        renderTodos();
+        renderTransactions();
+        renderNotes();
+        renderHabits();
+        renderCalendar();
+        renderWater();
+        renderMoods();
+        renderDiaries();
+        renderGoals();
+        renderAffirmations();
+        generatePalette();
+        updateStats();
+        document.getElementById("pomo-completed").textContent = pomoCount;
+        document.getElementById("pomo-minutes").textContent = pomoMins;
+        document.getElementById("pomo-streak").textContent = pomoStreak;
+      }
+      // ============================================
+      // INIT
+      // ============================================
+      function init() {
+        // Boshlang'ich history state
+        history.replaceState({ page: "dashboard" }, "", "#dashboard");
+        initWater();
+        initDiary();
+        renderAll();
+        generatePassword();
+        setConvType("length", document.querySelector("#page-converter .tab"));
+        document.getElementById("passLenVal").textContent =
+          document.getElementById("passLen").value;
+      }
+      init();
+    </script>
+  </body>
+</html>
